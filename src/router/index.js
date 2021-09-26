@@ -1,16 +1,34 @@
 import { createRouter, createWebHistory } from '@ionic/vue-router';
-import Home from '../views/Home.vue'
+import Tabs from '../views/Tabs'
 
 const routes = [
   {
     path: '/',
-    redirect: '/home'
+    redirect: '/tabs/home'
   },
   {
-    path: '/home',
-    name: 'Home',
-    component: Home
-  }
+    path: '/tabs',
+    name: 'Tabs',
+    component: Tabs,
+    children: [
+      {
+        path: 'home',
+        component: () => import('../views/Home')
+      },
+      {
+        path: 'profile',
+        component: () => import('../views/Profile')
+      },
+      {
+        path: 'exercise',
+        component: () => import('../views/Exercise')
+      },
+      {
+        path: 'ranking',
+        component: () => import('../views/Ranking')
+      }
+    ]
+  },
 ]
 
 const router = createRouter({
