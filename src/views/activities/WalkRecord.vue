@@ -1,13 +1,5 @@
 <template>
 <ion-page>
-  <ion-header>
-    <ion-toolbar>
-      <ion-buttons slot="start">
-        <ion-back-button text="back"></ion-back-button>
-      </ion-buttons>
-      <ion-title></ion-title>
-    </ion-toolbar>
-  </ion-header>
   <ion-content>
     <ion-grid>
       <ion-row>
