@@ -10,13 +10,29 @@
         <ion-row>
           <ion-col>
             <ion-card>
+              <ion-card-content>
+                <ion-item lines="none">
+                  <ion-icon slot="start" class="badge" size="large" :icon="ribbonOutline"></ion-icon>
+                  <ion-text color="primary">
+                    ยินดีด้วย คุณได้เลื่อนขั้นเป็นมือใหม่ระดับ 2
+                  </ion-text>
+                </ion-item>
+              </ion-card-content>
+            </ion-card>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col>
+            <ion-card>
               <img src="https://source.unsplash.com/gJtDg6WfMlQ">
               <ion-card-header>
                 <ion-card-title>Your Activities</ion-card-title>
               </ion-card-header>
               <ion-card-content>
+                <ion-text>Next level</ion-text>
+                <ion-progress-bar value="0.3"></ion-progress-bar>
                 <ion-list>
-                  <ion-item>
+                  <ion-item lines="full">
                     <ion-label>
                       Jogging
                     </ion-label>
@@ -24,7 +40,7 @@
                       30 mins
                     </ion-note>
                   </ion-item>
-                  <ion-item>
+                  <ion-item lines="full">
                     <ion-label>
                       Walking
                     </ion-label>
@@ -59,19 +75,28 @@
 <script>
 import {
   IonCard,
-    IonCardHeader,
-    IonCardContent,
+  IonCardHeader,
+  IonCardContent,
   IonContent,
   IonHeader,
   IonPage,
   IonTitle,
   IonToolbar,
-    IonGrid,
-    IonRow,
-    IonCol,
+  IonGrid,
+  IonRow,
+  IonCol,
+  IonList,
+  IonItem,
+  IonIcon,
+  IonButton,
+  IonProgressBar,
+  IonLabel,
+  IonCardTitle,
+  IonNote,
+  IonText,
 } from '@ionic/vue';
 import {defineComponent} from 'vue';
-import {home, personCircle, timer, bicycle, diamond, barChart, accessibility} from 'ionicons/icons';
+import { ribbonOutline } from 'ionicons/icons';
 
 export default defineComponent({
   name: 'Home',
@@ -87,16 +112,19 @@ export default defineComponent({
     IonGrid,
     IonRow,
     IonCol,
+    IonList,
+    IonItem,
+    IonIcon,
+    IonButton,
+    IonProgressBar,
+    IonLabel,
+    IonCardTitle,
+    IonNote,
+    IonText,
   },
   setup() {
     return {
-      personCircle,
-      home,
-      timer,
-      bicycle,
-      diamond,
-      barChart,
-      accessibility,
+      ribbonOutline,
     }
   }
 });
@@ -105,7 +133,6 @@ export default defineComponent({
 <style scoped>
 #container {
   text-align: center;
-
   position: absolute;
   left: 0;
   right: 0;
@@ -129,6 +156,10 @@ export default defineComponent({
 
 #container a {
   text-decoration: none;
+}
+
+.badge {
+  font-size: 64px;
 }
 
 </style>

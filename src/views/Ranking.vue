@@ -13,6 +13,46 @@
           <ion-col size="12">
             <ion-list>
               <ion-item-group>
+                <ion-item-divider>
+                  <ion-label>
+                    โครงการนำร่อง
+                  </ion-label>
+                </ion-item-divider>
+                <ion-item inset="true">
+                  <ion-avatar slot="start">
+                    <img src="https://i.pravatar.cc/300">
+                  </ion-avatar>
+                  <ion-label>Toy</ion-label>
+                  <ion-note slot="end">545</ion-note>
+                </ion-item>
+                <ion-item inset="true">
+                  <ion-avatar slot="start">
+                    <img src="https://i.pravatar.cc/300">
+                  </ion-avatar>
+                  <ion-label>Likit</ion-label>
+                  <ion-note slot="end">435</ion-note>
+                </ion-item>
+                <ion-item inset="true">
+                  <ion-avatar slot="start">
+                    <img src="https://i.pravatar.cc/300">
+                  </ion-avatar>
+                  <ion-label>Tu</ion-label>
+                  <ion-note slot="end">234</ion-note>
+                </ion-item>
+                <ion-item inset="true">
+                  <ion-avatar slot="start">
+                    <img src="https://i.pravatar.cc/300">
+                  </ion-avatar>
+                  <ion-label>Nut</ion-label>
+                  <ion-note slot="end">230</ion-note>
+                </ion-item>
+              </ion-item-group>
+              <ion-item-group>
+                <ion-item-divider>
+                  <ion-label>
+                    โครงการลดพุง คณะเทคนิคการแพทย์
+                  </ion-label>
+                </ion-item-divider>
                 <ion-item inset="true">
                   <ion-avatar slot="start">
                     <img src="https://i.pravatar.cc/300">
@@ -62,11 +102,13 @@ import {
   IonGrid,
   IonRow,
   IonCol,
-    IonNote,
+  IonNote,
+  IonText,
 } from '@ionic/vue';
 export default {
   name: "Ranking",
   components: {
+    IonText,
     IonNote,
     IonGrid,
     IonRow,

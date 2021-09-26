@@ -26,6 +26,10 @@ const routes = [
       {
         path: 'ranking',
         component: () => import('../views/Ranking')
+      },
+      {
+        path: 'health',
+        component: () => import('../views/Health')
       }
     ]
   },

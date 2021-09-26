@@ -15,7 +15,7 @@
           <ion-icon :icon="barChart"></ion-icon>
           <ion-label>Ranking</ion-label>
         </ion-tab-button>
-        <ion-tab-button tab="health">
+        <ion-tab-button tab="health" href="/tabs/health">
           <ion-icon :icon="accessibility"></ion-icon>
           <ion-label>Health</ion-label>
         </ion-tab-button>

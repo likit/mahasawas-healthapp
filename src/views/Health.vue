@@ -4,18 +4,9 @@
       <ion-grid>
         <ion-row>
           <ion-col>
-            <ion-text class="ion-text-lg-center">
-              <h1>Profile</h1>
+            <ion-text>
+              <h1>Health</h1>
             </ion-text>
-            <ion-item inset="true">
-              <ion-avatar slot="start">
-                <img src="https://i.pravatar.cc/300">
-              </ion-avatar>
-              <ion-label>
-                <h2>{{ profile.displayName }}</h2>
-                <p>likit.pre@mahidol.edu</p>
-              </ion-label>
-            </ion-item>
           </ion-col>
         </ion-row>
         <ion-row>
@@ -23,26 +14,37 @@
             <ion-list>
               <ion-item-group>
                 <ion-item-divider>
-                  <ion-label>Settings</ion-label>
+                  <ion-label>Records</ion-label>
                 </ion-item-divider>
-                <ion-item detail inset="true" href="/tabs/home" class="ion-margin-bottom">
-                  <ion-icon slot="start" :icon="personOutline"></ion-icon>
-                  <ion-label>Personal Info</ion-label>
+                <ion-item inset="true" detail href="/tabs/home">
+                  <ion-icon slot="start" :icon="waterOutline"></ion-icon>
+                  <ion-label>Lab tests</ion-label>
+                </ion-item>
+                <ion-item inset="true" detail href="/tabs/home">
+                  <ion-icon slot="start" :icon="scaleOutline"></ion-icon>
+                  <ion-label>Weight</ion-label>
+                </ion-item>
+                <ion-item inset="true" detail href="/tabs/home" class="ion-margin-bottom">
+                  <ion-icon slot="start" :icon="manOutline"></ion-icon>
+                  <ion-label>Body Composition</ion-label>
                 </ion-item>
               </ion-item-group>
               <ion-item-group>
                 <ion-item-divider>
                   <ion-label>
-                    Information
+                    Preferences
                   </ion-label>
                 </ion-item-divider>
-                <ion-item detail inset="true" href="/tabs/home">
-                  <ion-icon slot="start" :icon="alertCircleOutline"></ion-icon>
-                  <ion-label>Term & Condition</ion-label>
+                <ion-item inset="true" href="/tabs/home">
+                  <ion-icon slot="start" :icon="trophyOutline"></ion-icon>
+                  <ion-label>Goals</ion-label>
+                </ion-item>
+                <ion-item inset="true" href="/tabs/home">
+                  <ion-icon slot="start" :icon="trophyOutline"></ion-icon>
+                  <ion-label>Favorites</ion-label>
                 </ion-item>
               </ion-item-group>
             </ion-list>
-
           </ion-col>
         </ion-row>
       </ion-grid>
@@ -52,12 +54,17 @@
 
 <script>
 import liff from '@line/liff';
-import {personOutline, alertCircleOutline} from 'ionicons/icons';
+import {
+  waterOutline,
+  alertCircleOutline,
+  scaleOutline,
+  trophyOutline,
+  manOutline
+} from 'ionicons/icons';
 
 import {
   IonItemDivider,
   IonItemGroup,
-  IonAvatar,
   IonContent,
   IonPage,
   IonList,
@@ -74,23 +81,25 @@ import {defineComponent} from 'vue';
 export default defineComponent({
   name: 'Profile',
   components: {
-    IonText,
     IonGrid,
     IonRow,
     IonCol,
     IonIcon,
     IonItemDivider,
     IonItemGroup,
-    IonAvatar,
     IonContent,
     IonPage,
     IonList,
     IonItem,
     IonLabel,
+    IonText,
   },
   setup() {
     return {
-      personOutline,
+      waterOutline,
+      scaleOutline,
+      manOutline,
+      trophyOutline,
       alertCircleOutline
     }
   },
@@ -115,9 +124,5 @@ export default defineComponent({
 </script>
 
 <style scoped>
-
-.avatar {
-  margin: auto;
-}
 
 </style>
