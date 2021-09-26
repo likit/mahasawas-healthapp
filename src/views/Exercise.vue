@@ -12,7 +12,7 @@
         <ion-row>
           <ion-col>
             <ion-list>
-              <ion-item detail>
+              <ion-item detail router-link="/activities/walk-records">
                 <ion-thumbnail slot="start">
                   <img src="https://source.unsplash.com/PHIgYUGQPvU">
                 </ion-thumbnail>

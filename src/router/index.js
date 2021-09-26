@@ -29,6 +29,11 @@ const routes = [
       }
     ]
   },
+  {
+    path: '/activities/walk-records',
+    name: 'WalkRecord',
+    component: () => import('../views/activities/WalkRecord')
+  }
 ]
 
 const router = createRouter({
