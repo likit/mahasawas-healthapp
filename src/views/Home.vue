@@ -1,10 +1,5 @@
 <template>
   <ion-page>
-    <ion-header :translucent="true">
-      <ion-toolbar>
-        <ion-title>MUMT UberHealth App</ion-title>
-      </ion-toolbar>
-    </ion-header>
     <ion-content>
       <ion-grid>
         <ion-row>
@@ -78,10 +73,7 @@ import {
   IonCardHeader,
   IonCardContent,
   IonContent,
-  IonHeader,
   IonPage,
-  IonTitle,
-  IonToolbar,
   IonGrid,
   IonRow,
   IonCol,
@@ -102,10 +94,7 @@ export default defineComponent({
   name: 'Home',
   components: {
     IonContent,
-    IonHeader,
     IonPage,
-    IonTitle,
-    IonToolbar,
     IonCard,
     IonCardHeader,
     IonCardContent,

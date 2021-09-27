@@ -71,17 +71,13 @@ import {
   IonRow,
   IonCol,
   IonText,
-  IonBackButton,
-    IonInput,
-    IonDatetime,
-    IonList,
-    IonItem,
-    IonButton,
-    IonToolbar,
-    IonListHeader,
-    IonLabel,
-    IonTitle,
-    IonButtons,
+  IonInput,
+  IonDatetime,
+  IonList,
+  IonItem,
+  IonButton,
+  IonListHeader,
+  IonLabel,
 } from '@ionic/vue';
 
 import {defineComponent} from 'vue';
@@ -94,17 +90,13 @@ export default defineComponent({
     IonRow,
     IonCol,
     IonText,
-    IonBackButton,
     IonInput,
     IonDatetime,
     IonList,
     IonItem,
     IonButton,
-    IonToolbar,
     IonListHeader,
     IonLabel,
-    IonTitle,
-    IonButtons,
   }
 })
 </script>

@@ -17,8 +17,9 @@
                   <img src="https://source.unsplash.com/PHIgYUGQPvU">
                 </ion-thumbnail>
                 <ion-label>
-                  <p>Walking</p>
+                  Walking
                   <p>เดิน</p>
+                  <ion-progress-bar value="0.2"></ion-progress-bar>
                 </ion-label>
               </ion-item>
               <ion-item detail>
@@ -26,8 +27,9 @@
                   <img src="https://source.unsplash.com/oGv9xIl7DkY">
                 </ion-thumbnail>
                 <ion-label>
-                  <p>Jogging</p>
+                  Jogging
                   <p>วิ่ง</p>
+                  <ion-progress-bar value="0.5"></ion-progress-bar>
                 </ion-label>
               </ion-item>
               <ion-item detail>
@@ -35,8 +37,9 @@
                   <img src="https://source.unsplash.com/XOcM3n0QkHg">
                 </ion-thumbnail>
                 <ion-label>
-                  <p>Swimming</p>
+                  Swimming
                   <p>ว่ายน้ำ</p>
+                  <ion-progress-bar value="0.1"></ion-progress-bar>
                 </ion-label>
               </ion-item>
               <ion-item detail>
@@ -44,8 +47,9 @@
                   <img src="https://source.unsplash.com/K2xGNNcQn_w">
                 </ion-thumbnail>
                 <ion-label>
-                  <p>Biking</p>
+                  Biking
                   <p>ปั่นจักรยาน</p>
+                  <ion-progress-bar value="0"></ion-progress-bar>
                 </ion-label>
               </ion-item>
               <ion-item detail>
@@ -53,8 +57,9 @@
                   <img src="https://source.unsplash.com/BcVvVvqiCGA">
                 </ion-thumbnail>
                 <ion-label>
-                  <p>Dancing</p>
+                  Dancing
                   <p>เต้นแอโรบิก ลีลาศ ซุมบ้า</p>
+                  <ion-progress-bar value="0"></ion-progress-bar>
                 </ion-label>
               </ion-item>
             </ion-list>
@@ -76,12 +81,14 @@ import {
   IonGrid,
   IonRow,
   IonCol,
+  IonProgressBar,
   IonText,
 } from '@ionic/vue';
 import {defineComponent} from 'vue';
 export default defineComponent({
   name: "Exercise",
   components: {
+    IonProgressBar,
     IonText,
     IonThumbnail,
     IonGrid,

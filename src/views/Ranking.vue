@@ -92,6 +92,7 @@
 
 <script>
 import {
+  IonItemDivider,
   IonItemGroup,
   IonAvatar,
   IonContent,
@@ -108,6 +109,7 @@ import {
 export default {
   name: "Ranking",
   components: {
+    IonItemDivider,
     IonText,
     IonNote,
     IonGrid,
