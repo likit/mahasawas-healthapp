@@ -9,11 +9,11 @@
             </ion-text>
             <ion-item inset="true">
               <ion-avatar slot="start">
-                <img src="https://i.pravatar.cc/300">
+                <img :src="profile.pictureUrl">
               </ion-avatar>
               <ion-label>
                 <h2>{{ profile.displayName }}</h2>
-                <p>likit.pre@mahidol.edu</p>
+                <p>{{ profile.statusMessage }}</p>
               </ion-label>
             </ion-item>
           </ion-col>
@@ -98,18 +98,16 @@ export default defineComponent({
     return {
       profile: {
         'displayName': 'Likit',
-        'pictureUrl': ''
+        'pictureUrl': '',
+        'statusMessage': '',
       }
     }
   },
-  methods: {
-    getLineProfile: () => {
-      liff.getProfile().then(profile => {
-        this.profile = profile
-      })
-    }
-  },
   mounted() {
+    const self = this
+    liff.getProfile().then(profile => {
+      self.profile = profile
+    })
   }
 });
 </script>

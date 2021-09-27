@@ -1,5 +1,8 @@
-import firebase from '@firebase/app';
-import '@firebase/firestore';
+import { initializeApp } from 'firebase/app';
+import { getFirestore } from "firebase/firestore";
+import { getStorage } from "firebase/storage";
+
+'@firebase/firestore';
 import '@firebase/storage';
 
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
@@ -13,13 +16,12 @@ const firebaseConfig = {
     measurementId: "G-CV6PH30VEE"
 };
 
-firebase.initializeApp(firebaseConfig)
+const app = initializeApp(firebaseConfig)
 
-const db = firebase.firestore()
-const storage = firebase.storage()
+const db = getFirestore(app)
+const storage = getStorage(app)
 
 export {
-    firebase as fb,
     storage,
     db,
 }
