@@ -11,49 +11,21 @@
       </ion-row>
       <ion-row>
         <ion-col>
-          <p>Graph here</p>
-        </ion-col>
-      </ion-row>
-      <ion-row>
-        <ion-col>
-          <ion-list-header>
-            <ion-text>
-              <h3>
-                New record
-              </h3>
-            </ion-text>
-          </ion-list-header>
           <ion-list>
-            <ion-item>
-              <ion-label position="floating">Start date</ion-label>
-              <ion-datetime display-format="MMM DD, YYYY"></ion-datetime>
-            </ion-item>
-            <ion-item>
-              <ion-label position="floating">Start time</ion-label>
-              <ion-datetime display-format="HH:mm"></ion-datetime>
-            </ion-item>
-            <ion-item>
-              <ion-label position="floating">End date</ion-label>
-              <ion-datetime display-format="MMM DD, YYYY"></ion-datetime>
-            </ion-item>
-            <ion-item>
-              <ion-label position="floating">End time</ion-label>
-              <ion-datetime display-format="HH:mm"></ion-datetime>
-            </ion-item>
-            <ion-item>
-              <ion-label position="floating">Steps</ion-label>
-              <ion-input type="number" placeholder="จำนวนก้าวโดยประมาณ"></ion-input>
-            </ion-item>
-            <ion-item>
-              <ion-label position="floating">Calories</ion-label>
-              <ion-input type="number" placeholder="แคลอรีที่เผาผลาญโดยประมาณ"></ion-input>
+            <ion-item detail v-for="record in records" :key="record.id">
+              <ion-label>
+                {{ record.startDateTime.toDate().toLocaleString() }}
+                <p>
+                  Distance {{ record.distance }} km, Steps {{ record.steps }}
+                </p>
+              </ion-label>
             </ion-item>
           </ion-list>
         </ion-col>
       </ion-row>
       <ion-row>
         <ion-col>
-          <ion-button expand="block">
+          <ion-button expand="block" href="/activities/walk-record-form">
             Add
           </ion-button>
         </ion-col>
@@ -71,16 +43,16 @@ import {
   IonRow,
   IonCol,
   IonText,
-  IonInput,
-  IonDatetime,
+  IonButton,
   IonList,
   IonItem,
-  IonButton,
-  IonListHeader,
   IonLabel,
 } from '@ionic/vue';
 
 import {defineComponent} from 'vue';
+import { db } from '../../firebase'
+import { collection, getDocs } from 'firebase/firestore'
+
 export default defineComponent({
   name: "WalkRecord",
   components: {
@@ -90,13 +62,24 @@ export default defineComponent({
     IonRow,
     IonCol,
     IonText,
-    IonInput,
-    IonDatetime,
+    IonButton,
     IonList,
     IonItem,
-    IonButton,
-    IonListHeader,
     IonLabel,
+  },
+  data () {
+    return {
+      records: []
+    }
+  },
+  async mounted () {
+    const ref = collection(db, 'activity_records')
+    const querySnapshot = await getDocs(ref)
+    querySnapshot.forEach(d=>{
+      let data = d.data()
+      data.id = d.id
+      this.records.push(data)
+    })
   }
 })
 </script>

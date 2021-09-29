@@ -37,6 +37,11 @@ const routes = [
     path: '/activities/walk-records',
     name: 'WalkRecord',
     component: () => import('../views/activities/WalkRecord')
+  },
+  {
+    path: '/activities/walk-record-form',
+    name: 'WalkRecordForm',
+    component: () => import('../views/activities/WalkRecordForm')
   }
 ]
 
