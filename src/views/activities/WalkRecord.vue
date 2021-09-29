@@ -12,11 +12,11 @@
       <ion-row>
         <ion-col>
           <ion-list>
-            <ion-item detail v-for="record in records" :key="record.id">
+            <ion-item detail v-for="record in records" :key="record.id" @click="goToDetail(record.id)">
               <ion-label>
                 {{ record.startDateTime.toDate().toLocaleString() }}
                 <p>
-                  Distance {{ record.distance }} km, Steps {{ record.steps }}
+                  Distance {{ record.distance }} km, Steps {{ record.steps }}, Est. calories {{ ((record.endDateTime - record.startDateTime) / 60) * 5.23 }}
                 </p>
               </ion-label>
             </ion-item>
@@ -72,8 +72,14 @@ export default defineComponent({
       records: []
     }
   },
+  methods: {
+    goToDetail (recordId) {
+      this.$router.push({ name: 'WalkRecordDetail', params: { recordId: recordId}})
+    }
+  },
   async mounted () {
     const ref = collection(db, 'activity_records')
+    // TODO: add query for getting only walk records of a specific user
     const querySnapshot = await getDocs(ref)
     querySnapshot.forEach(d=>{
       let data = d.data()

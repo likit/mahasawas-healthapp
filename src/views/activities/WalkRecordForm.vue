@@ -35,6 +35,10 @@
                 <ion-label position="floating">Distance (km)</ion-label>
                 <ion-input type="number" min="0.1" step="0.1" v-model="distance" placeholder="ระยะทางหน่วยกิโลเมตร"></ion-input>
               </ion-item>
+              <ion-item>
+                <ion-label position="floating">Calculated calories</ion-label>
+                <ion-input readonly v-model="estimatedCal"></ion-input>
+              </ion-item>
               <ion-item class="ion-margin-bottom">
                 <ion-label position="floating">Calories (cal)</ion-label>
                 <ion-input type="number" min="0" step="100" v-model="calories" placeholder="แคลอรีที่เผาผลาญโดยประมาณ"></ion-input>
@@ -117,10 +121,18 @@ export default defineComponent({
     return {
       startDateTime: new Date().toISOString(),
       endDateTime: new Date().toISOString(),
-      distance: null,
-      steps: null,
-      calories: null,
-      intensity: null,
+      distance: 0,
+      steps: 0,
+      calories: 0,
+      intensity: 1,
+    }
+  },
+  computed: {
+    estimatedCal () {
+      let end = new Date(this.endDateTime)
+      let start = new Date(this.startDateTime)
+      let delta = end - start
+      return (delta / 60000) * 5.23 * this.intensity
     }
   },
   methods: {
@@ -128,10 +140,10 @@ export default defineComponent({
       const self = this
       self.startDateTime = new Date().toISOString()
       self.endDateTime = new Date().toISOString()
-      self.distance = null
-      self.steps = null
-      self.calories = null
-      self.intensity = null
+      self.distance = 0
+      self.steps = 0
+      self.calories = 0
+      self.intensity = 1
     },
     async presentAlert() {
       const alert = await alertController
@@ -149,6 +161,7 @@ export default defineComponent({
     },
     saveData () {
       const self = this
+      // TODO: add start, end datetime validation
       if ((self.startDateTime != '' || self.startDateTime != null)
           && (self.endDateTime != '' || self.endDateTime != null)) {
         const ref = collection(db, 'activity_records')
@@ -163,6 +176,7 @@ export default defineComponent({
           type: 'walking'
         }).then(()=>{
           self.clearForm()
+          self.$router.back()
         })
       }
     }
