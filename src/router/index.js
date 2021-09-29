@@ -34,6 +34,11 @@ const routes = [
     ]
   },
   {
+    path: '/milestones',
+    name: 'Milestone',
+    component: () => import('../views/Milestone')
+  },
+  {
     path: '/activities/walk-records',
     name: 'WalkRecord',
     component: () => import('../views/activities/WalkRecord')
@@ -42,6 +47,11 @@ const routes = [
     path: '/activities/walk-record-form',
     name: 'WalkRecordForm',
     component: () => import('../views/activities/WalkRecordForm')
+  },
+  {
+    path: '/activities/walk-record-detail/:recordId',
+    name: 'WalkRecordDetail',
+    component: () => import('../views/activities/WalkRecordDetail')
   }
 ]
 
