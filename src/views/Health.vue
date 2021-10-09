@@ -67,6 +67,13 @@
                     <p>เป้าหมาย</p>
                   </ion-label>
                 </ion-item>
+                <ion-item inset="true" detail href="/milestones">
+                  <ion-icon slot="start" :icon="flagOutline"></ion-icon>
+                  <ion-label>
+                    Milestones
+                    <p>ความสำเร็จ</p>
+                  </ion-label>
+                </ion-item>
               </ion-item-group>
             </ion-list>
           </ion-col>
@@ -83,6 +90,7 @@ import {
   alertCircleOutline,
   headsetOutline,
   trophyOutline,
+  flagOutline,
   scaleOutline,
   manOutline,
   happyOutline
@@ -128,6 +136,7 @@ export default defineComponent({
       manOutline,
       trophyOutline,
       happyOutline,
+      flagOutline,
       alertCircleOutline
     }
   },
