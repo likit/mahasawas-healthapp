@@ -58,6 +58,16 @@ const routes = [
     name: 'JogRecord',
     component: () => import('../views/activities/JogRecord')
   },
+  {
+    path: '/activities/jog-record-detail/:recordId',
+    name: 'JogRecordDetail',
+    component: () => import('../views/activities/JogRecordDetail')
+  },
+  {
+    path: '/activities/jog-record-form',
+    name: 'JogRecordForm',
+    component: () => import('../views/activities/JogRecordForm')
+  },
 ]
 
 const router = createRouter({

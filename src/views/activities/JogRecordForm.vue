@@ -5,7 +5,7 @@
         <ion-row>
           <ion-col>
             <ion-text>
-              <h1>Walk Record</h1>
+              <h1>Jog Record</h1>
             </ion-text>
           </ion-col>
         </ion-row>
@@ -26,10 +26,6 @@
               <ion-item>
                 <ion-label position="floating">End</ion-label>
                 <ion-datetime display-format="MMM DD, YYYY HH:mm" v-model="endDateTime"></ion-datetime>
-              </ion-item>
-              <ion-item>
-                <ion-label position="floating">Steps</ion-label>
-                <ion-input type="number" min="1" step="1" v-model="steps" placeholder="จำนวนก้าวโดยประมาณ"></ion-input>
               </ion-item>
               <ion-item>
                 <ion-label position="floating">Distance (km)</ion-label>
@@ -94,7 +90,7 @@ import { db } from '../../firebase'
 import { collection, addDoc } from '@firebase/firestore'
 
 export default defineComponent({
-  name: "WalkRecordForm",
+  name: "JogRecordForm",
   components: {
     IonIcon,
     IonContent,
@@ -173,7 +169,7 @@ export default defineComponent({
           steps: self.steps,
           calories: self.calories,
           createdAt: new Date(),
-          type: 'walking'
+          type: 'jogging'
         }).then(()=>{
           self.clearForm()
           self.$router.back()

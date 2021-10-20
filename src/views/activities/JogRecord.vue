@@ -16,7 +16,7 @@
                 <ion-label>
                   {{ record.startDateTime.toDate().toLocaleString() }}
                   <p>
-                    Distance {{ record.distance }} km, Steps {{ record.steps }}, Est. calories {{ ((record.endDateTime - record.startDateTime) / 60) * 5.23 }}
+                    Distance {{ record.distance }} km, Est. calories {{ ((record.endDateTime - record.startDateTime) / 60) * 5.23 }}
                   </p>
                 </ion-label>
               </ion-item>
@@ -25,7 +25,7 @@
         </ion-row>
         <ion-row>
           <ion-col>
-            <ion-button expand="block" href="/activities/walk-record-form">
+            <ion-button expand="block" href="/activities/jog-record-form">
               Add
             </ion-button>
           </ion-col>
@@ -61,7 +61,7 @@ export default {
   },
   methods: {
     goToDetail (recordId) {
-      this.$router.push({ name: 'WalkRecordDetail', params: { recordId: recordId}})
+      this.$router.push({ name: 'JogRecordDetail', params: { recordId: recordId}})
     }
   },
   async mounted () {
