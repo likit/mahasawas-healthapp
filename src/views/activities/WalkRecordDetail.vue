@@ -151,7 +151,8 @@ export default defineComponent({
     documentQuerySnapshot.docs.forEach(d=>{
       let data = d.data()
       data.id = d.id
-      if (self.record.submissions.indexOf(data.id) < 0) {
+      if (self.record.submissions &&
+          self.record.submissions.indexOf(data.id) < 0) {
         self.campaigns.push(data)
       }
     })

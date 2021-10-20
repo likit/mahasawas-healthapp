@@ -22,7 +22,7 @@
                   <ion-progress-bar value="0.2"></ion-progress-bar>
                 </ion-label>
               </ion-item>
-              <ion-item detail>
+              <ion-item detail router-link="/activities/jog-records">
                 <ion-thumbnail slot="start">
                   <img src="https://source.unsplash.com/oGv9xIl7DkY">
                 </ion-thumbnail>

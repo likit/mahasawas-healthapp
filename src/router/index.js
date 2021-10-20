@@ -52,7 +52,12 @@ const routes = [
     path: '/activities/walk-record-detail/:recordId',
     name: 'WalkRecordDetail',
     component: () => import('../views/activities/WalkRecordDetail')
-  }
+  },
+  {
+    path: '/activities/jog-records',
+    name: 'JogRecord',
+    component: () => import('../views/activities/JogRecord')
+  },
 ]
 
 const router = createRouter({

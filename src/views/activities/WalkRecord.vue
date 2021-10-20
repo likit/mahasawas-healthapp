@@ -51,7 +51,7 @@ import {
 
 import {defineComponent} from 'vue';
 import { db } from '../../firebase'
-import { collection, getDocs } from 'firebase/firestore'
+import {collection, getDocs, query, where} from 'firebase/firestore'
 
 export default defineComponent({
   name: "WalkRecord",
@@ -79,8 +79,8 @@ export default defineComponent({
   },
   async mounted () {
     const ref = collection(db, 'activity_records')
-    // TODO: add query for getting only walk records of a specific user
-    const querySnapshot = await getDocs(ref)
+    const q = query(ref, where("type", "==", "walking"))
+    const querySnapshot = await getDocs(q)
     querySnapshot.forEach(d=>{
       let data = d.data()
       data.id = d.id
