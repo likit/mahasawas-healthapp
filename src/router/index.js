@@ -68,6 +68,21 @@ const routes = [
     name: 'JogRecordForm',
     component: () => import('../views/activities/JogRecordForm')
   },
+  {
+    path: '/activities/swim-records',
+    name: 'SwimRecord',
+    component: () => import('../views/activities/SwimRecord')
+  },
+  {
+    path: '/activities/swim-record-detail/:recordId',
+    name: 'SwimRecordDetail',
+    component: () => import('../views/activities/SwimRecordDetail')
+  },
+  {
+    path: '/activities/swim-record-form',
+    name: 'SwimRecordForm',
+    component: () => import('../views/activities/SwimRecordForm')
+  },
 ]
 
 const router = createRouter({

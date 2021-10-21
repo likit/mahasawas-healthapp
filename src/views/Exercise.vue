@@ -32,7 +32,7 @@
                   <ion-progress-bar value="0.5"></ion-progress-bar>
                 </ion-label>
               </ion-item>
-              <ion-item detail>
+              <ion-item detail router-link="/activities/swim-records">
                 <ion-thumbnail slot="start">
                   <img src="https://source.unsplash.com/XOcM3n0QkHg">
                 </ion-thumbnail>
