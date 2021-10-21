@@ -18,7 +18,10 @@
                     {{ record.startDateTime.toDate().toLocaleString() }}
                   </p>
                   <p>
-                    Distance {{ record.distance }} km, Steps {{ record.steps }}
+                    Distance {{ record.distance }} km
+                  </p>
+                  <p>
+                    Steps {{ record.steps }}
                   </p>
                   <p>
                     ID {{ record.id }}
