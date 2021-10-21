@@ -37,7 +37,7 @@
               </ion-item>
               <ion-item>
                 <ion-label position="floating">Calculated calories</ion-label>
-                <ion-input readonly v-model="estimatedCal"></ion-input>
+                <ion-input readonly :value="estimatedCal"></ion-input>
               </ion-item>
               <ion-item class="ion-margin-bottom">
                 <ion-label position="floating">Calories (cal)</ion-label>
