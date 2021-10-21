@@ -42,7 +42,7 @@
                   <ion-progress-bar value="0.1"></ion-progress-bar>
                 </ion-label>
               </ion-item>
-              <ion-item detail>
+              <ion-item detail router-link="/activities/bike-records">
                 <ion-thumbnail slot="start">
                   <img src="https://source.unsplash.com/K2xGNNcQn_w">
                 </ion-thumbnail>

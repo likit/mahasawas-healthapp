@@ -83,6 +83,21 @@ const routes = [
     name: 'SwimRecordForm',
     component: () => import('../views/activities/SwimRecordForm')
   },
+  {
+    path: '/activities/bike-records',
+    name: 'BikeRecord',
+    component: () => import('../views/activities/BikeRecord')
+  },
+  {
+    path: '/activities/bike-record-detail/:recordId',
+    name: 'BikeRecordDetail',
+    component: () => import('../views/activities/BikeRecordDetail')
+  },
+  {
+    path: '/activities/bike-record-form',
+    name: 'BikeRecordForm',
+    component: () => import('../views/activities/BikeRecordForm')
+  },
 ]
 
 const router = createRouter({
