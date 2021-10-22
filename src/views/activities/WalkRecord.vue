@@ -16,7 +16,13 @@
               <ion-label>
                 {{ record.startDateTime.toDate().toLocaleString() }}
                 <p>
-                  Distance {{ record.distance }} km, Steps {{ record.steps }}, Est. calories {{ ((record.endDateTime - record.startDateTime) / 60) * 5.23 }}
+                  Distance {{ record.distance }} km
+                </p>
+                <p>
+                  Steps {{ record.steps }}
+                </p>
+                <p>
+                  Est. calories {{ ((record.endDateTime - record.startDateTime) / 60) * 5.23 }}
                 </p>
               </ion-label>
             </ion-item>
