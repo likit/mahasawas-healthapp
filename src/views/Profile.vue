@@ -51,7 +51,7 @@
 </template>
 
 <script>
-import liff from '@line/liff';
+// import liff from '@line/liff';
 import {personOutline, alertCircleOutline} from 'ionicons/icons';
 
 import {
@@ -70,6 +70,7 @@ import {
   IonText,
 } from '@ionic/vue';
 import {defineComponent} from 'vue';
+import liff from "@line/liff";
 
 export default defineComponent({
   name: 'Profile',
@@ -104,10 +105,12 @@ export default defineComponent({
     }
   },
   mounted() {
-    const self = this
-    liff.getProfile().then(profile => {
-      self.profile = profile
-    })
+    if (process.env.NODE_ENV !== "development") {
+      const self = this
+      liff.getProfile().then(profile => {
+        self.profile = profile
+      })
+    }
   }
 });
 </script>

@@ -35,12 +35,15 @@ export default defineComponent({
               setDoc(userRef, profile, u.id)
             })
           }
+        }).catch(()=>{
+          console.log('Failed to load profile.')
         })
       })
     }
   },
   mounted() {
-    this.initializeLine()
+    if (process.env.NODE_ENV !== 'development')
+      this.initializeLine()
   }
 });
 </script>
