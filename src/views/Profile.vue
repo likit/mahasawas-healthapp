@@ -33,6 +33,17 @@
               <ion-item-group>
                 <ion-item-divider>
                   <ion-label>
+                    Groups
+                  </ion-label>
+                </ion-item-divider>
+                <ion-item detail inset="true" href="/tabs/home">
+                  <ion-icon slot="start" :icon="peopleOutline"></ion-icon>
+                  <ion-label>List</ion-label>
+                </ion-item>
+              </ion-item-group>
+              <ion-item-group>
+                <ion-item-divider>
+                  <ion-label>
                     Information
                   </ion-label>
                 </ion-item-divider>
@@ -51,7 +62,11 @@
 </template>
 
 <script>
-import {personOutline, alertCircleOutline} from 'ionicons/icons';
+import {
+  personOutline,
+  peopleOutline,
+  alertCircleOutline
+} from 'ionicons/icons';
 
 import {
   IonItemDivider,
@@ -70,6 +85,8 @@ import {
 } from '@ionic/vue';
 import {defineComponent} from 'vue';
 import liff from "@line/liff";
+import {db} from "@/firebase";
+import { getDocs, query, where, collection } from "firebase/firestore";
 
 export default defineComponent({
   name: 'Profile',
@@ -91,6 +108,7 @@ export default defineComponent({
   setup() {
     return {
       personOutline,
+      peopleOutline,
       alertCircleOutline
     }
   },
@@ -104,12 +122,21 @@ export default defineComponent({
       }
     }
   },
-  mounted() {
+  async mounted() {
     const self = this
     if (liff.isInClient() && liff.isLoggedIn()) {
       liff.getProfile().then(profile => {
         self.profile = profile
       })
+    } else {
+      const ref = collection(db, 'users')
+      const q = query(ref, where("userId", "==", "mumthealthtest"))
+      const querySnapshot = await getDocs(q)
+      if (!querySnapshot.empty) {
+        querySnapshot.forEach(d => {
+          self.profile = d.data()
+        })
+      }
     }
   }
 });
