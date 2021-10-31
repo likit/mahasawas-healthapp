@@ -75,6 +75,7 @@ import {
   IonText,
   IonButton,
   IonList,
+  IonListHeader,
   IonItem,
   IonSelect,
   IonSelectOption,
@@ -96,6 +97,7 @@ export default defineComponent({
     IonText,
     IonButton,
     IonList,
+    IonListHeader,
     IonItem,
     IonLabel,
     IonSelect,
@@ -115,7 +117,7 @@ export default defineComponent({
         const ref = doc(db, 'activity_records', this.record.id)
         deleteDoc(ref).then(async () => {
           await self.presentAlert()
-          self.$router.go(1)
+          self.$router.push({ name: 'SwimRecord' })
         })
       }
     },
