@@ -5,7 +5,7 @@
         <ion-row>
           <ion-col>
             <ion-text>
-              <h1>Bike Record</h1>
+              <h1>Biking Record</h1>
             </ion-text>
           </ion-col>
         </ion-row>
