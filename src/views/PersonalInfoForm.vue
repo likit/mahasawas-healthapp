@@ -102,11 +102,8 @@ export default defineComponent({
       title: null,
       phone: null,
       profile: {
-        userId: 'mumthealthtest',
-        displayName: 'Testing Account'
+        userId: null,
       },
-      updateDateTime: new Date().toISOString(),
-      endDateTime: new Date().toISOString(),
     }
   },
   computed: {
@@ -114,7 +111,6 @@ export default defineComponent({
   methods: {
     clearForm () {
       const self = this
-      self.updateDateTime = new Date().toISOString()
       self.firstname = null
       self.lastname = null
       self.title = null
@@ -132,6 +128,7 @@ export default defineComponent({
           lastname: self.lastname,
           title: self.title,
           phone: self.phone,
+          challenges: [],
         }).then(() => {
           self.clearForm()
           self.$router.push({name: 'Profile'})
@@ -149,30 +146,45 @@ export default defineComponent({
           self.$router.push({name: 'Profile'})
         })
       }
+    },
+    async loadProfile () {
+      const self = this
+      const ref = collection(db, 'profiles')
+      const q = query(ref, where("userId", "==", self.profile.userId))
+      const querySnapshot = await getDocs(q)
+      if (!querySnapshot.empty) {
+        querySnapshot.forEach(d => {
+          let data = d.data()
+          self.profileId = d.id
+          self.firstname = data.firstname
+          self.lastname = data.lastname
+          self.title = data.title
+          self.phone = data.phone
+          self.profileId = d.id
+        })
+      }
     }
   },
   async mounted() {
     const self = this
 
-    if (liff.isInClient())
+    if (liff.isInClient()) {
       if (liff.isLoggedIn()) {
         liff.getProfile().then(profile => {
           self.profile = profile
+          self.loadProfile()
         })
       }
-
-    const ref = collection(db, 'profiles')
-    const q = query(ref, where("userId", "==", self.profile.userId))
-    const querySnapshot = await getDocs(q)
-    if (!querySnapshot.empty) {
-      querySnapshot.forEach(d => {
-        let data = d.data()
-        self.profileId = d.id
-        self.firstname = data.firstname
-        self.lastname = data.lastname
-        self.title = data.title
-        self.phone = data.phone
-      })
+    } else {
+      let ref = collection(db, 'profiles')
+      let q = query(ref, where("userId", "==", "mumthealthtest"))
+      let querySnapshot = await getDocs(q)
+      if (!querySnapshot.empty) {
+        querySnapshot.forEach(d => {
+          self.profile = d.data()
+        })
+      }
+      await self.loadProfile()
     }
   }
 })
