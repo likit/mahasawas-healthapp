@@ -17,6 +17,7 @@ const routes = [
       },
       {
         path: 'profile',
+        name: 'Profile',
         component: () => import('../views/Profile')
       },
       {
@@ -32,6 +33,11 @@ const routes = [
         component: () => import('../views/Health')
       }
     ]
+  },
+  {
+    path: '/profile/personal-info-edit',
+    name: 'PersonalInfoForm',
+    component: () => import('../views/PersonalInfoForm')
   },
   {
     path: '/milestones',

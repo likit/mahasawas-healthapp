@@ -25,7 +25,7 @@
                 <ion-item-divider>
                   <ion-label>Settings</ion-label>
                 </ion-item-divider>
-                <ion-item detail inset="true" href="/tabs/home" class="ion-margin-bottom">
+                <ion-item detail inset="true" href="/profile/personal-info-edit" class="ion-margin-bottom">
                   <ion-icon slot="start" :icon="personOutline"></ion-icon>
                   <ion-label>Personal Info</ion-label>
                 </ion-item>
@@ -51,7 +51,6 @@
 </template>
 
 <script>
-// import liff from '@line/liff';
 import {personOutline, alertCircleOutline} from 'ionicons/icons';
 
 import {
@@ -98,15 +97,16 @@ export default defineComponent({
   data() {
     return {
       profile: {
-        'displayName': 'Likit',
+        'displayName': 'Testing Account',
         'pictureUrl': '',
         'statusMessage': '',
+        'userId': 'mumthealthtest'
       }
     }
   },
   mounted() {
-    if (process.env.NODE_ENV !== "development") {
-      const self = this
+    const self = this
+    if (liff.isInClient() && liff.isLoggedIn()) {
       liff.getProfile().then(profile => {
         self.profile = profile
       })
