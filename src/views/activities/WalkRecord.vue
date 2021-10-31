@@ -57,7 +57,7 @@ import {
 
 import {defineComponent} from 'vue';
 import { db } from '../../firebase'
-import {collection, getDocs, query, where} from 'firebase/firestore'
+import { collection, getDocs, query, where, orderBy } from 'firebase/firestore'
 
 export default defineComponent({
   name: "WalkRecord",
@@ -85,7 +85,7 @@ export default defineComponent({
   },
   async mounted () {
     const ref = collection(db, 'activity_records')
-    const q = query(ref, where("type", "==", "walking"))
+    const q = query(ref, where("type", "==", "walking"), orderBy('startDateTime', 'desc'))
     const querySnapshot = await getDocs(q)
     querySnapshot.forEach(d=>{
       let data = d.data()

@@ -176,7 +176,7 @@ export default defineComponent({
           type: 'walking'
         }).then(()=>{
           self.clearForm()
-          self.$router.back()
+          self.$router.push({ name: 'WalkRecord' })
         })
       }
     }
