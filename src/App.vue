@@ -8,7 +8,7 @@
 import {IonApp, IonRouterOutlet} from '@ionic/vue';
 import {defineComponent} from 'vue';
 import { db } from './firebase'
-import { addDoc, query, collection, where, getDocs, setDoc } from 'firebase/firestore'
+import { addDoc, query, collection, where, getDocs, updateDoc } from 'firebase/firestore'
 
 import liff from '@line/liff';
 
@@ -32,7 +32,7 @@ export default defineComponent({
             addDoc(userRef, profile)
           } else {
             querySnapshot.forEach((u) => {
-              setDoc(userRef, profile, u.id)
+              updateDoc(userRef, profile, u.id)
             })
           }
         }).catch(()=>{
@@ -42,8 +42,9 @@ export default defineComponent({
     }
   },
   mounted() {
-    if (process.env.NODE_ENV !== 'development')
+    if (liff.isInClient()) {
       this.initializeLine()
+    }
   }
 });
 </script>
