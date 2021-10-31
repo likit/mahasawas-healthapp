@@ -25,7 +25,7 @@
               </ion-card-header>
               <ion-card-content>
                 <ion-text>Next level</ion-text>
-                <ion-progress-bar value="0.3"></ion-progress-bar>
+                <ion-progress-bar value="0.0"></ion-progress-bar>
                 <ion-list>
                   <ion-item lines="full" v-for="rec in records" :key="rec.id">
                     <ion-label>
