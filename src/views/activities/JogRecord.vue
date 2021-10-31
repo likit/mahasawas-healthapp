@@ -37,7 +37,7 @@
 
 <script>
 import {IonButton, IonCol, IonContent, IonGrid, IonItem, IonLabel, IonList, IonPage, IonRow, IonText} from "@ionic/vue";
-import {collection, getDocs, where, query} from "firebase/firestore";
+import {collection, getDocs, where, query, orderBy } from "firebase/firestore";
 import {db} from "@/firebase";
 
 export default {
@@ -66,7 +66,7 @@ export default {
   },
   async mounted () {
     const ref = collection(db, 'activity_records')
-    const q = query(ref, where("type", "==", "jogging"))
+    const q = query(ref, where("type", "==", "jogging"), orderBy('startDateTime', 'desc'))
     const querySnapshot = await getDocs(q)
     querySnapshot.forEach(d=>{
       let data = d.data()
