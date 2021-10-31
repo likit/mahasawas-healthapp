@@ -9,7 +9,7 @@
                 <ion-item lines="none">
                   <ion-icon slot="start" class="badge" size="large" :icon="ribbonOutline"></ion-icon>
                   <ion-text color="primary">
-                    ยินดีด้วย คุณได้เลื่อนขั้นเป็นมือใหม่ระดับ 2
+                    โปรแกรมนี้ยังอยู่ในระหว่างการทดสอบ
                   </ion-text>
                 </ion-item>
               </ion-card-content>
@@ -21,26 +21,18 @@
             <ion-card>
               <img src="https://source.unsplash.com/gJtDg6WfMlQ">
               <ion-card-header>
-                <ion-card-title>Your Activities</ion-card-title>
+                <ion-card-title>Your Recent Activities</ion-card-title>
               </ion-card-header>
               <ion-card-content>
                 <ion-text>Next level</ion-text>
                 <ion-progress-bar value="0.3"></ion-progress-bar>
                 <ion-list>
-                  <ion-item lines="full">
+                  <ion-item lines="full" v-for="rec in records" :key="rec.id">
                     <ion-label>
-                      Jogging
+                      {{ rec.type }}
                     </ion-label>
                     <ion-note slot="end">
-                      30 mins
-                    </ion-note>
-                  </ion-item>
-                  <ion-item lines="full">
-                    <ion-label>
-                      Walking
-                    </ion-label>
-                    <ion-note slot="end">
-                      1 hrs
+                      {{ rec.estimatedCalories.toFixed(1) }} Cal.
                     </ion-note>
                   </ion-item>
                 </ion-list>
@@ -89,6 +81,9 @@ import {
 } from '@ionic/vue';
 import {defineComponent} from 'vue';
 import { ribbonOutline } from 'ionicons/icons';
+import liff from "@line/liff";
+import { collection, getDocs, query, where, orderBy, limit } from "firebase/firestore";
+import {db} from "@/firebase";
 
 export default defineComponent({
   name: 'Home',
@@ -114,6 +109,45 @@ export default defineComponent({
   setup() {
     return {
       ribbonOutline,
+    }
+  },
+  data () {
+    return {
+      profile: {
+        userId: null
+      },
+      records: []
+    }
+  },
+  async mounted() {
+    const self = this
+    if (liff.isInClient() && liff.isLoggedIn()) {
+      liff.getProfile().then(profile => {
+        self.profile = profile
+      })
+    } else {
+      const ref = collection(db, 'users')
+      const q = query(ref, where("userId", "==", "mumthealthtest"))
+      const querySnapshot = await getDocs(q)
+      if (!querySnapshot.empty) {
+        querySnapshot.forEach(d => {
+          self.profile = d.data()
+        })
+      }
+    }
+    const ref = collection(db, 'activity_records')
+    const q = query(ref,
+        where('userId', '==', self.profile.userId),
+        orderBy('startDateTime', 'desc'),
+        limit(4)
+    )
+    const querySnapshot = await getDocs(q)
+    if (!querySnapshot.empty) {
+      querySnapshot.forEach(d => {
+        let data = d.data()
+        data.id = d.id
+        self.records.push(data)
+      })
     }
   }
 });
