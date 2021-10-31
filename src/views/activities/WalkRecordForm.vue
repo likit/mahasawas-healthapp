@@ -172,6 +172,7 @@ export default defineComponent({
           distance: self.distance,
           steps: self.steps,
           calories: self.calories,
+          estimatedCalories: self.estimatedCal,
           createdAt: new Date(),
           type: 'walking'
         }).then(()=>{
