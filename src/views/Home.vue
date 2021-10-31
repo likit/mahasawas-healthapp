@@ -40,16 +40,18 @@
             </ion-card>
           </ion-col>
         </ion-row>
-        <ion-row>
+        <ion-row v-for="ch in allChallenges" :key="ch.id">
           <ion-col>
             <ion-card>
               <img src="https://source.unsplash.com/J154nEkpzlQ">
               <ion-card-header>
-                <ion-card-title>Upcoming Activity</ion-card-title>
+                <ion-card-title>{{ ch.title }} Challenges</ion-card-title>
               </ion-card-header>
               <ion-card-content>
-                Socialize with your peers and get motivated!
-                <ion-button>Join now</ion-button>
+                {{ ch.pitch }}
+                <ion-button v-if="profile.challenges.indexOf(ch.id) < 0"
+                            @click="addChallenge(ch.id)">Join now</ion-button>
+                <ion-button v-else @click="addChallenge(ch.id)">Detail</ion-button>
               </ion-card-content>
             </ion-card>
           </ion-col>
@@ -82,7 +84,7 @@ import {
 import {defineComponent} from 'vue';
 import { ribbonOutline } from 'ionicons/icons';
 import liff from "@line/liff";
-import { collection, getDocs, query, where, orderBy, limit } from "firebase/firestore";
+import { collection, getDocs, query, where, orderBy, limit, doc, updateDoc } from "firebase/firestore";
 import {db} from "@/firebase";
 
 export default defineComponent({
@@ -114,40 +116,84 @@ export default defineComponent({
   data () {
     return {
       profile: {
-        userId: null
+        userId: null,
+        challenges: [],
       },
-      records: []
+      records: [],
+      allChallenges: [],
+      groups: []
+    }
+  },
+  methods: {
+    async addChallenge(challengeId) {
+      if (this.profile.challenges.indexOf(challengeId) >= 0) {
+        return
+      }
+      const self = this
+      let ref = collection(db, 'profiles')
+      let q = query(ref, where('userId', '==', self.profile.userId))
+      let querySnapshot = await getDocs(q)
+      if (!querySnapshot.empty) {
+        querySnapshot.forEach(d => {
+          let docRef = doc(db, 'profiles', d.id)
+          self.profile.challenges.push(challengeId)
+          updateDoc(docRef, { challenges: self.profile.challenges})
+        })
+      }
     }
   },
   async mounted() {
     const self = this
+    let querySnapshot, ref, q
     if (liff.isInClient() && liff.isLoggedIn()) {
       liff.getProfile().then(profile => {
         self.profile = profile
       })
     } else {
-      const ref = collection(db, 'users')
-      const q = query(ref, where("userId", "==", "mumthealthtest"))
-      const querySnapshot = await getDocs(q)
+      let ref = collection(db, 'profiles')
+      let q = query(ref, where("userId", "==", "mumthealthtest"))
+      let querySnapshot = await getDocs(q)
       if (!querySnapshot.empty) {
         querySnapshot.forEach(d => {
           self.profile = d.data()
         })
       }
     }
-    const ref = collection(db, 'activity_records')
-    const q = query(ref,
+    console.log(self.profile)
+    ref = collection(db, 'userGroups')
+    q = query(ref, where("members", "array-contains", self.profile.userId))
+    querySnapshot = await getDocs(q)
+    querySnapshot.forEach(d=>{
+      let data = d.data()
+      data.id = d.id
+      self.groups.push(data)
+    })
+    ref = collection(db, 'activity_records')
+    q = query(ref,
         where('userId', '==', self.profile.userId),
         orderBy('startDateTime', 'desc'),
         limit(4)
     )
-    const querySnapshot = await getDocs(q)
+    querySnapshot = await getDocs(q)
     if (!querySnapshot.empty) {
       querySnapshot.forEach(d => {
         let data = d.data()
         data.id = d.id
         self.records.push(data)
       })
+    }
+    for (const g of self.groups) {
+      let ref = collection(db, 'challenges')
+      let q = query(ref, where('groups', 'array-contains', g.id))
+      let querySnapshot = await getDocs(q)
+      if (!querySnapshot.empty) {
+        querySnapshot.forEach(d => {
+          let data = d.data()
+          data.id = d.id
+          if (self.profile.challenges.indexOf(d.id) < 0)
+            self.allChallenges.push(data)
+        })
+      }
     }
   }
 });
