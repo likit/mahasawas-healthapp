@@ -19,7 +19,7 @@
                 <ion-label>
                   Walking
                   <p>เดิน</p>
-                  <ion-progress-bar value="0.2"></ion-progress-bar>
+                  <ion-progress-bar :value="counts['walking']/total"></ion-progress-bar>
                 </ion-label>
               </ion-item>
               <ion-item detail router-link="/activities/jog-records">
@@ -29,7 +29,7 @@
                 <ion-label>
                   Jogging
                   <p>วิ่ง</p>
-                  <ion-progress-bar value="0.5"></ion-progress-bar>
+                  <ion-progress-bar :value="counts['jogging']/total"></ion-progress-bar>
                 </ion-label>
               </ion-item>
               <ion-item detail router-link="/activities/swim-records">
@@ -39,7 +39,7 @@
                 <ion-label>
                   Swimming
                   <p>ว่ายน้ำ</p>
-                  <ion-progress-bar value="0.1"></ion-progress-bar>
+                  <ion-progress-bar :value="counts['swimming']/total"></ion-progress-bar>
                 </ion-label>
               </ion-item>
               <ion-item detail router-link="/activities/bike-records">
@@ -49,7 +49,7 @@
                 <ion-label>
                   Biking
                   <p>ปั่นจักรยาน</p>
-                  <ion-progress-bar value="0"></ion-progress-bar>
+                  <ion-progress-bar :value="counts['biking']/total"></ion-progress-bar>
                 </ion-label>
               </ion-item>
               <!--
@@ -87,6 +87,9 @@ import {
   IonText,
 } from '@ionic/vue';
 import {defineComponent} from 'vue';
+import liff from "@line/liff";
+import {collection, getDocs, query, where} from "firebase/firestore";
+import {db} from "@/firebase";
 export default defineComponent({
   name: "Exercise",
   components: {
@@ -101,6 +104,52 @@ export default defineComponent({
     IonList,
     IonItem,
     IonLabel,
+  },
+  data () {
+    return {
+      profile: {
+        userId: null,
+      },
+      counts: {
+        walking: 0,
+        jogging: 0,
+        swimming: 0,
+        biking: 0
+      },
+      total: 0
+    }
+  },
+  methods: {
+    async loadActivities () {
+      const self = this
+      let ref = collection(db, 'activity_records')
+      let q = query(ref, where('userId', '==', self.profile.userId))
+      let querySnapshot = await getDocs(q)
+      querySnapshot.forEach(d=>{
+        let data = d.data()
+        self.total++
+        self.counts[data.type]++
+      })
+    }
+  },
+  async mounted () {
+    const self = this
+    if (liff.isInClient() && liff.isLoggedIn()) {
+      liff.getProfile().then(profile => {
+        self.profile = profile
+        self.loadActivities()
+      })
+    } else {
+      let ref = collection(db, 'profiles')
+      let q = query(ref, where("userId", "==", "mumthealthtest"))
+      let querySnapshot = await getDocs(q)
+      if (!querySnapshot.empty) {
+        querySnapshot.forEach(d => {
+          self.profile = d.data()
+        })
+      }
+      self.loadActivities()
+    }
   }
 });
 </script>
