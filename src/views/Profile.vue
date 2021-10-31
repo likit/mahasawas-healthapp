@@ -36,7 +36,7 @@
                     Groups
                   </ion-label>
                 </ion-item-divider>
-                <ion-item detail inset="true" href="/tabs/home">
+                <ion-item detail inset="true" href="/profile/groups">
                   <ion-icon slot="start" :icon="peopleOutline"></ion-icon>
                   <ion-label>List</ion-label>
                 </ion-item>
@@ -85,7 +85,7 @@ import {
 } from '@ionic/vue';
 import {defineComponent} from 'vue';
 import liff from "@line/liff";
-import {db} from "@/firebase";
+import { db } from "../firebase";
 import { getDocs, query, where, collection } from "firebase/firestore";
 
 export default defineComponent({

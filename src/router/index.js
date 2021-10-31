@@ -40,6 +40,11 @@ const routes = [
     component: () => import('../views/PersonalInfoForm')
   },
   {
+    path: '/profile/groups',
+    name: 'GroupList',
+    component: () => import('../views/GroupList')
+  },
+  {
     path: '/milestones',
     name: 'Milestone',
     component: () => import('../views/Milestone')
