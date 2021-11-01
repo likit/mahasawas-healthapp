@@ -22,6 +22,7 @@
                   <ion-progress-bar :value="counts['walking']/total"></ion-progress-bar>
                 </ion-label>
               </ion-item>
+              <!--
               <ion-item detail router-link="/activities/jog-records">
                 <ion-thumbnail slot="start">
                   <img src="https://source.unsplash.com/oGv9xIl7DkY">
@@ -52,7 +53,6 @@
                   <ion-progress-bar :value="counts['biking']/total"></ion-progress-bar>
                 </ion-label>
               </ion-item>
-              <!--
               <ion-item detail>
                 <ion-thumbnail slot="start">
                   <img src="https://source.unsplash.com/BcVvVvqiCGA">
@@ -87,9 +87,9 @@ import {
   IonText,
 } from '@ionic/vue';
 import {defineComponent} from 'vue';
-import liff from "@line/liff";
 import {collection, getDocs, query, where} from "firebase/firestore";
 import {db} from "@/firebase";
+import {mapState} from "vuex";
 export default defineComponent({
   name: "Exercise",
   components: {
@@ -107,9 +107,6 @@ export default defineComponent({
   },
   data () {
     return {
-      profile: {
-        userId: null,
-      },
       counts: {
         walking: 0,
         jogging: 0,
@@ -119,11 +116,14 @@ export default defineComponent({
       total: 0
     }
   },
+  computed: {
+    ...mapState(['profile', 'user'])
+  },
   methods: {
     async loadActivities () {
       const self = this
       let ref = collection(db, 'activity_records')
-      let q = query(ref, where('userId', '==', self.profile.userId))
+      let q = query(ref, where('userId', '==', self.$store.state.user.userId))
       let querySnapshot = await getDocs(q)
       querySnapshot.forEach(d=>{
         let data = d.data()
@@ -133,23 +133,7 @@ export default defineComponent({
     }
   },
   async mounted () {
-    const self = this
-    if (liff.isInClient() && liff.isLoggedIn()) {
-      liff.getProfile().then(profile => {
-        self.profile = profile
-        self.loadActivities()
-      })
-    } else {
-      let ref = collection(db, 'profiles')
-      let q = query(ref, where("userId", "==", "mumthealthtest"))
-      let querySnapshot = await getDocs(q)
-      if (!querySnapshot.empty) {
-        querySnapshot.forEach(d => {
-          self.profile = d.data()
-        })
-      }
-      self.loadActivities()
-    }
+    this.loadActivities()
   }
 });
 </script>

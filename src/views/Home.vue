@@ -125,12 +125,12 @@ export default defineComponent({
   },
   methods: {
     async addChallenge(challengeId) {
-      if (this.profile.challenges.indexOf(challengeId) >= 0) {
+      if (this.$store.state.profile.challenges.indexOf(challengeId) >= 0) {
         return
       }
       const self = this
       let ref = collection(db, 'profiles')
-      let q = query(ref, where('userId', '==', self.profile.userId))
+      let q = query(ref, where('userId', '==', self.$store.state.profile.userId))
       let querySnapshot = await getDocs(q)
       if (!querySnapshot.empty) {
         querySnapshot.forEach(d => {
@@ -144,7 +144,7 @@ export default defineComponent({
   async mounted() {
     const self = this
     let ref = collection(db, 'profiles')
-    let q = query(ref, where("userId", "==", self.user.userId))
+    let q = query(ref, where("userId", "==", self.$store.state.user.userId))
     let querySnapshot = await getDocs(q)
     if (!querySnapshot.empty) {
       querySnapshot.forEach(d => {
@@ -152,7 +152,7 @@ export default defineComponent({
       })
     }
     ref = collection(db, 'userGroups')
-    q = query(ref, where("members", "array-contains", self.user.userId))
+    q = query(ref, where("members", "array-contains", self.$store.state.user.userId))
     querySnapshot = await getDocs(q)
     querySnapshot.forEach(d=>{
       let data = d.data()
@@ -161,7 +161,7 @@ export default defineComponent({
     })
     ref = collection(db, 'activity_records')
     q = query(ref,
-        where('userId', '==', self.user.userId),
+        where('userId', '==', self.$store.state.user.userId),
         orderBy('startDateTime', 'desc'),
         limit(4)
     )
@@ -181,7 +181,7 @@ export default defineComponent({
         querySnapshot.forEach(d => {
           let data = d.data()
           data.id = d.id
-          if (self.profile.challenges.indexOf(d.id) < 0)
+          if (self.$store.state.profile.challenges.indexOf(d.id) < 0)
             self.allChallenges.push(data)
         })
       }
