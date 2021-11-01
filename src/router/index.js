@@ -31,7 +31,12 @@ const routes = [
       {
         path: 'health',
         component: () => import('../views/Health')
-      }
+      },
+      {
+        path: 'soon',
+        name: 'Soon',
+        component: () => import('../views/Soon')
+      },
     ]
   },
   {

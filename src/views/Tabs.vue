@@ -11,11 +11,11 @@
           <ion-icon :icon="bicycle"></ion-icon>
           <ion-label>Exercise</ion-label>
         </ion-tab-button>
-        <ion-tab-button tab="ranking" href="/tabs/ranking">
+        <ion-tab-button tab="ranking" href="/tabs/soon">
           <ion-icon :icon="barChart"></ion-icon>
           <ion-label>Ranking</ion-label>
         </ion-tab-button>
-        <ion-tab-button tab="health" href="/tabs/health">
+        <ion-tab-button tab="health" href="/tabs/soon">
           <ion-icon :icon="accessibility"></ion-icon>
           <ion-label>Health</ion-label>
         </ion-tab-button>

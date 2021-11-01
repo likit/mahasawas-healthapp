@@ -6,7 +6,7 @@
         <ion-col>
           <ion-text>
             <h1>Walk Record</h1>
-            <p>{{ this.user.userId }}</p>
+            <p>{{ this.user.displayName }}</p>
           </ion-text>
         </ion-col>
       </ion-row>

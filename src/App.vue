@@ -8,7 +8,7 @@
 import {IonApp, IonRouterOutlet} from '@ionic/vue';
 import {defineComponent} from 'vue';
 import { db } from './firebase'
-import { addDoc, query, collection, where, getDocs, updateDoc } from 'firebase/firestore'
+import { addDoc, query, collection, where, getDocs, updateDoc, doc } from 'firebase/firestore'
 
 import liff from '@line/liff';
 
@@ -19,9 +19,9 @@ export default defineComponent({
     IonRouterOutlet
   },
   methods: {
-    initializeLine: async () => {
+    async initializeLine () {
       const self = this
-      await liff.init({liffId: '1655424321-KqJyaXOy'}).then(() => {
+      liff.init({liffId: '1656587558-Njod5Y9o'}).then(() => {
         if (!liff.isInClient() && !liff.isLoggedIn()) {
           liff.login()
         }
@@ -47,12 +47,11 @@ export default defineComponent({
             })
           } else {
             querySnapshot.forEach((u) => {
-              updateDoc(userRef, profile, u.id)
+              let userRef = doc(db, "users", u.id)
+              updateDoc(userRef, profile)
             })
           }
-        self.$store.dispatch('updateUser', profile)
-        }).catch(()=>{
-          console.log('Failed to load profile.')
+          self.$store.dispatch('updateUser', profile)
         })
       })
     }
@@ -60,7 +59,7 @@ export default defineComponent({
   async mounted() {
     const self = this
     if (liff.isInClient()) {
-      this.initializeLine()
+      await this.initializeLine()
     } else {
       // Load user data
       let ref = collection(db, 'users')
@@ -74,7 +73,6 @@ export default defineComponent({
       q = query(ref, where("userId", "==", "mumthealthtest"))
       querySnapshot = await getDocs(q)
       querySnapshot.forEach(d => {
-        console.log(d.data())
         self.$store.dispatch('updateProfile', d.data())
       })
     }
