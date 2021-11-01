@@ -84,9 +84,7 @@ import {
   IonText,
 } from '@ionic/vue';
 import {defineComponent} from 'vue';
-import liff from "@line/liff";
-import { db } from "../firebase";
-import { getDocs, query, where, collection } from "firebase/firestore";
+import { mapState } from 'vuex'
 
 export default defineComponent({
   name: 'Profile',
@@ -112,32 +110,8 @@ export default defineComponent({
       alertCircleOutline
     }
   },
-  data() {
-    return {
-      profile: {
-        'displayName': 'Testing Account',
-        'pictureUrl': '',
-        'statusMessage': '',
-        'userId': 'mumthealthtest'
-      }
-    }
-  },
-  async mounted() {
-    const self = this
-    if (liff.isInClient() && liff.isLoggedIn()) {
-      liff.getProfile().then(profile => {
-        self.profile = profile
-      })
-    } else {
-      const ref = collection(db, 'users')
-      const q = query(ref, where("userId", "==", "mumthealthtest"))
-      const querySnapshot = await getDocs(q)
-      if (!querySnapshot.empty) {
-        querySnapshot.forEach(d => {
-          self.profile = d.data()
-        })
-      }
-    }
+  computed: {
+    ...mapState({ profile: 'user' }),
   }
 });
 </script>

@@ -83,9 +83,9 @@ import {
 } from '@ionic/vue';
 import {defineComponent} from 'vue';
 import { ribbonOutline } from 'ionicons/icons';
-import liff from "@line/liff";
 import { collection, getDocs, query, where, orderBy, limit, doc, updateDoc } from "firebase/firestore";
 import {db} from "@/firebase";
+import { mapState} from "vuex";
 
 export default defineComponent({
   name: 'Home',
@@ -115,14 +115,13 @@ export default defineComponent({
   },
   data () {
     return {
-      profile: {
-        userId: null,
-        challenges: [],
-      },
       records: [],
       allChallenges: [],
       groups: []
     }
+  },
+  computed: {
+    ...mapState(['user', 'profile'])
   },
   methods: {
     async addChallenge(challengeId) {
@@ -144,24 +143,16 @@ export default defineComponent({
   },
   async mounted() {
     const self = this
-    let querySnapshot, ref, q
-    if (liff.isInClient() && liff.isLoggedIn()) {
-      liff.getProfile().then(profile => {
-        self.profile = profile
+    let ref = collection(db, 'profiles')
+    let q = query(ref, where("userId", "==", self.user.userId))
+    let querySnapshot = await getDocs(q)
+    if (!querySnapshot.empty) {
+      querySnapshot.forEach(d => {
+        self.$store.dispatch('updateProfile', d.data())
       })
-    } else {
-      let ref = collection(db, 'profiles')
-      let q = query(ref, where("userId", "==", "mumthealthtest"))
-      let querySnapshot = await getDocs(q)
-      if (!querySnapshot.empty) {
-        querySnapshot.forEach(d => {
-          self.profile = d.data()
-        })
-      }
     }
-    console.log(self.profile)
     ref = collection(db, 'userGroups')
-    q = query(ref, where("members", "array-contains", self.profile.userId))
+    q = query(ref, where("members", "array-contains", self.user.userId))
     querySnapshot = await getDocs(q)
     querySnapshot.forEach(d=>{
       let data = d.data()
@@ -170,7 +161,7 @@ export default defineComponent({
     })
     ref = collection(db, 'activity_records')
     q = query(ref,
-        where('userId', '==', self.profile.userId),
+        where('userId', '==', self.user.userId),
         orderBy('startDateTime', 'desc'),
         limit(4)
     )
