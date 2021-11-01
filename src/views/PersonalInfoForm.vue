@@ -130,7 +130,7 @@ export default defineComponent({
         querySnap.forEach(d => {
           let docRef = doc(db, 'profiles', d.id)
           let updatedProfile = {
-            userId: self.profile.userId,
+            userId: self.user.userId,
             title: self.profile.title,
             firstname: self.profile.firstname,
             lastname: self.profile.lastname,
