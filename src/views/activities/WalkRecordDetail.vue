@@ -80,6 +80,11 @@
           </ion-col>
         </ion-row>
       </ion-grid>
+      <ion-fab vertical="bottom" horizontal="center" slot="fixed">
+        <ion-fab-button @click="$router.push({ name: 'Home' })">
+          <ion-icon :icon="arrowBackCircle"></ion-icon>
+        </ion-fab-button>
+      </ion-fab>
     </ion-content>
   </ion-page>
 </template>
@@ -96,6 +101,9 @@ import {
   IonList,
   IonListHeader,
   IonItem,
+  IonFabButton,
+  IonFab,
+  IonIcon,
   IonSelect,
   IonSelectOption,
   IonLabel, alertController,
@@ -103,6 +111,7 @@ import {
 
 import {defineComponent} from 'vue';
 import { db } from '../../firebase'
+import { arrowBackCircle } from 'ionicons/icons'
 import {doc, getDoc, getDocs, collection, deleteDoc, query, where, addDoc } from 'firebase/firestore'
 
 export default defineComponent({
@@ -120,7 +129,15 @@ export default defineComponent({
     IonItem,
     IonLabel,
     IonSelect,
+    IonFabButton,
+    IonFab,
+    IonIcon,
     IonSelectOption
+  },
+  setup () {
+    return {
+      arrowBackCircle
+    }
   },
   data() {
     return {

@@ -38,6 +38,11 @@
         </ion-col>
       </ion-row>
     </ion-grid>
+    <ion-fab vertical="bottom" horizontal="center" slot="fixed">
+      <ion-fab-button @click="$router.push({ name: 'Home' })">
+        <ion-icon :icon="arrowBackCircle"></ion-icon>
+      </ion-fab-button>
+    </ion-fab>
   </ion-content>
 </ion-page>
 </template>
@@ -53,11 +58,15 @@ import {
   IonButton,
   IonList,
   IonItem,
+  IonFabButton,
+  IonFab,
   IonLabel,
+  IonIcon,
 } from '@ionic/vue';
 
 import {defineComponent} from 'vue';
 import { db } from '../../firebase'
+import { arrowBackCircle } from 'ionicons/icons'
 import { collection, getDocs, query, where, orderBy } from 'firebase/firestore'
 import {mapState} from "vuex";
 
@@ -74,6 +83,14 @@ export default defineComponent({
     IonList,
     IonItem,
     IonLabel,
+    IonFabButton,
+    IonFab,
+    IonIcon,
+  },
+  setup () {
+    return {
+      arrowBackCircle,
+    }
   },
   data () {
     return {
