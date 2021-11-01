@@ -121,26 +121,24 @@ export default defineComponent({
     }
   },
   computed: {
-    ...mapState(['user', 'profile'])
+    ...mapState(['user', 'profile']),
   },
   // mapState is async operation, we need to watch for when the data is ready
   watch: {
     user: async function (newValue) {
       await this.loadGroups(newValue.userId)
+      await this.loadChallenges()
       await this.loadActivities(newValue.userId)
-    },
-    profile: async function (newValue) {
-      await this.loadChallenges(newValue.challenges)
     }
   },
   methods: {
     async addChallenge(challengeId) {
-      if (this.$store.state.profile.challenges.indexOf(challengeId) >= 0) {
+      if (this.profile.challenges.indexOf(challengeId) >= 0) {
         return
       }
       const self = this
       let ref = collection(db, 'profiles')
-      let q = query(ref, where('userId', '==', self.$store.state.profile.userId))
+      let q = query(ref, where('userId', '==', self.user.userId))
       let querySnapshot = await getDocs(q)
       if (!querySnapshot.empty) {
         querySnapshot.forEach(d => {
@@ -176,20 +174,17 @@ export default defineComponent({
         self.records.push(data)
       })
     },
-    async loadChallenges(challenges) {
+    async loadChallenges() {
       const self = this
       for (const g of self.groups) {
         let ref = collection(db, 'challenges')
         let q = query(ref, where('groups', 'array-contains', g.id))
         let querySnapshot = await getDocs(q)
-        if (!querySnapshot.empty) {
-          querySnapshot.forEach(d => {
-            let data = d.data()
-            data.id = d.id
-            if (challenges.indexOf(d.id) < 0)
-              self.allChallenges.push(data)
-          })
-        }
+        querySnapshot.forEach(d => {
+          let data = d.data()
+          data.id = d.id
+          self.allChallenges.push(data)
+        })
       }
     }
   }
