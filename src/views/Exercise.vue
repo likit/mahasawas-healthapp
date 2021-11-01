@@ -6,6 +6,7 @@
           <ion-col>
             <ion-text class="ion-text-lg-center">
               <h1>Exercise</h1>
+              <p>{{ $store.state.user.displayName }}</p>
             </ion-text>
           </ion-col>
         </ion-row>

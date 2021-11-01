@@ -9,11 +9,11 @@
             </ion-text>
             <ion-item inset="true">
               <ion-avatar slot="start">
-                <img :src="profile.pictureUrl">
+                <img :src="user.pictureUrl">
               </ion-avatar>
               <ion-label>
-                <h2>{{ profile.displayName }}</h2>
-                <p>{{ profile.statusMessage }}</p>
+                <h2>{{ user.displayName }}</h2>
+                <p>{{ user.statusMessage }}</p>
               </ion-label>
             </ion-item>
           </ion-col>
@@ -53,7 +53,6 @@
                 </ion-item>
               </ion-item-group>
             </ion-list>
-
           </ion-col>
         </ion-row>
       </ion-grid>
@@ -111,7 +110,7 @@ export default defineComponent({
     }
   },
   computed: {
-    ...mapState({ profile: 'user' }),
+    ...mapState(['user']),
   }
 });
 </script>

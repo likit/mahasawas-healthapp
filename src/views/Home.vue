@@ -143,17 +143,9 @@ export default defineComponent({
   },
   async mounted() {
     const self = this
-    let ref = collection(db, 'profiles')
-    let q = query(ref, where("userId", "==", self.$store.state.user.userId))
+    let ref = collection(db, 'userGroups')
+    let q = query(ref, where("members", "array-contains", self.$store.state.user.userId))
     let querySnapshot = await getDocs(q)
-    if (!querySnapshot.empty) {
-      querySnapshot.forEach(d => {
-        self.$store.dispatch('updateProfile', d.data())
-      })
-    }
-    ref = collection(db, 'userGroups')
-    q = query(ref, where("members", "array-contains", self.$store.state.user.userId))
-    querySnapshot = await getDocs(q)
     querySnapshot.forEach(d=>{
       let data = d.data()
       data.id = d.id
