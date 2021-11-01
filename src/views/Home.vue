@@ -9,7 +9,7 @@
                 <ion-item lines="none">
                   <ion-icon slot="start" class="badge" size="large" :icon="ribbonOutline"></ion-icon>
                   <ion-text color="primary">
-                    โปรแกรมนี้ยังอยู่ในระหว่างการทดสอบ
+                    Welcome {{ $store.state.user.displayName }}
                   </ion-text>
                 </ion-item>
               </ion-card-content>
@@ -123,6 +123,16 @@ export default defineComponent({
   computed: {
     ...mapState(['user', 'profile'])
   },
+  // mapState is async operation, we need to watch for when the data is ready
+  watch: {
+    user: async function (newValue) {
+      await this.loadGroups(newValue.userId)
+      await this.loadActivities(newValue.userId)
+    },
+    profile: async function (newValue) {
+      await this.loadChallenges(newValue.challenges)
+    }
+  },
   methods: {
     async addChallenge(challengeId) {
       if (this.$store.state.profile.challenges.indexOf(challengeId) >= 0) {
@@ -139,43 +149,47 @@ export default defineComponent({
           updateDoc(docRef, { challenges: self.profile.challenges})
         })
       }
-    }
-  },
-  async mounted() {
-    const self = this
-    let ref = collection(db, 'userGroups')
-    let q = query(ref, where("members", "array-contains", self.$store.state.user.userId))
-    let querySnapshot = await getDocs(q)
-    querySnapshot.forEach(d=>{
-      let data = d.data()
-      data.id = d.id
-      self.groups.push(data)
-    })
-    ref = collection(db, 'activity_records')
-    q = query(ref,
-        where('userId', '==', self.$store.state.user.userId),
-        orderBy('startDateTime', 'desc'),
-        limit(4)
-    )
-    querySnapshot = await getDocs(q)
-    if (!querySnapshot.empty) {
+    },
+    async loadGroups(userId) {
+      const self = this
+      let ref = collection(db, 'userGroups')
+      let q = query(ref, where("members", "array-contains", userId))
+      let querySnapshot = await getDocs(q)
+      querySnapshot.forEach(d => {
+        let data = d.data()
+        data.id = d.id
+        self.groups.push(data)
+      })
+    },
+    async loadActivities(userId) {
+      const self = this
+      let ref = collection(db, 'activity_records')
+      let q = query(ref,
+          where('userId', '==', userId),
+          orderBy('startDateTime', 'desc'),
+          limit(4)
+      )
+      let querySnapshot = await getDocs(q)
       querySnapshot.forEach(d => {
         let data = d.data()
         data.id = d.id
         self.records.push(data)
       })
-    }
-    for (const g of self.groups) {
-      let ref = collection(db, 'challenges')
-      let q = query(ref, where('groups', 'array-contains', g.id))
-      let querySnapshot = await getDocs(q)
-      if (!querySnapshot.empty) {
-        querySnapshot.forEach(d => {
-          let data = d.data()
-          data.id = d.id
-          if (self.$store.state.profile.challenges.indexOf(d.id) < 0)
-            self.allChallenges.push(data)
-        })
+    },
+    async loadChallenges(challenges) {
+      const self = this
+      for (const g of self.groups) {
+        let ref = collection(db, 'challenges')
+        let q = query(ref, where('groups', 'array-contains', g.id))
+        let querySnapshot = await getDocs(q)
+        if (!querySnapshot.empty) {
+          querySnapshot.forEach(d => {
+            let data = d.data()
+            data.id = d.id
+            if (challenges.indexOf(d.id) < 0)
+              self.allChallenges.push(data)
+          })
+        }
       }
     }
   }
