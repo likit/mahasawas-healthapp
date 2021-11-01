@@ -104,7 +104,6 @@ import {
 import {defineComponent} from 'vue';
 import { db } from '../../firebase'
 import {doc, getDoc, getDocs, collection, deleteDoc, query, where, addDoc } from 'firebase/firestore'
-import liff from "@line/liff";
 
 export default defineComponent({
   name: "WalkRecordDetail",
