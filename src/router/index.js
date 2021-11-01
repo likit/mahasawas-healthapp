@@ -13,6 +13,7 @@ const routes = [
     children: [
       {
         path: 'home',
+        name: 'Home',
         component: () => import('../views/Home')
       },
       {
@@ -30,6 +31,7 @@ const routes = [
       },
       {
         path: 'health',
+        name: 'Health',
         component: () => import('../views/Health')
       },
       {
