@@ -6,6 +6,7 @@
         <ion-col>
           <ion-text>
             <h1>Walk Record</h1>
+            <p>{{ this.user.userId }}</p>
           </ion-text>
         </ion-col>
       </ion-row>
@@ -58,6 +59,7 @@ import {
 import {defineComponent} from 'vue';
 import { db } from '../../firebase'
 import { collection, getDocs, query, where, orderBy } from 'firebase/firestore'
+import {mapState} from "vuex";
 
 export default defineComponent({
   name: "WalkRecord",
@@ -78,6 +80,9 @@ export default defineComponent({
       records: []
     }
   },
+  computed: {
+    ...mapState(['profile', 'user'])
+  },
   methods: {
     goToDetail (recordId) {
       this.$router.push({ name: 'WalkRecordDetail', params: { recordId: recordId}})
@@ -85,7 +90,10 @@ export default defineComponent({
   },
   async mounted () {
     const ref = collection(db, 'activity_records')
-    const q = query(ref, where("type", "==", "walking"), orderBy('startDateTime', 'desc'))
+    const q = query(ref,
+        where('userId', '==', this.$store.state.user.userId),
+        where("type", "==", "walking"),
+        orderBy('startDateTime', 'desc'))
     const querySnapshot = await getDocs(q)
     querySnapshot.forEach(d=>{
       let data = d.data()

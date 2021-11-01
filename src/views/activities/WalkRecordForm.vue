@@ -59,7 +59,7 @@
         </ion-row>
         <ion-row>
           <ion-col>
-            <ion-button expand="block" color="success" @click="saveData">
+            <ion-button :disabled="!isFormValid" expand="block" color="success" @click="saveData">
               Save
             </ion-button>
           </ion-col>
@@ -92,6 +92,7 @@ import { helpCircleOutline } from 'ionicons/icons'
 import {defineComponent} from 'vue';
 import { db } from '../../firebase'
 import { collection, addDoc } from '@firebase/firestore'
+import {mapState} from "vuex";
 
 export default defineComponent({
   name: "WalkRecordForm",
@@ -128,12 +129,19 @@ export default defineComponent({
     }
   },
   computed: {
+    isFormValid () {
+      return (this.startDateTime != '' || this.startDateTime != null)
+          && (this.endDateTime != '' || this.endDateTime != null)
+          && (this.estimatedCal > 0)
+          && (this.steps > 0)
+    },
     estimatedCal () {
       let end = new Date(this.endDateTime)
       let start = new Date(this.startDateTime)
       let delta = end - start
       return (delta / 60000) * 5.23 * this.intensity
-    }
+    },
+    ...mapState(['profile', 'user'])
   },
   methods: {
     clearForm () {
@@ -163,10 +171,12 @@ export default defineComponent({
       const self = this
       // TODO: add start, end datetime validation
       if ((self.startDateTime != '' || self.startDateTime != null)
-          && (self.endDateTime != '' || self.endDateTime != null)) {
+          && (self.endDateTime != '' || self.endDateTime != null)
+          && (self.startDateTime !== self.endDateTime)
+          && (self.startDateTime < self.endDateTime)) {
         const ref = collection(db, 'activity_records')
         addDoc(ref, {
-          userId: 'mumthealthtest',
+          userId: self.user.userId,
           startDateTime: new Date(self.startDateTime),
           endDateTime: new Date(self.endDateTime),
           distance: self.distance,

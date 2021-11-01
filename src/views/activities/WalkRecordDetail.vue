@@ -203,20 +203,6 @@ export default defineComponent({
   },
   async mounted() {
     const self = this
-    if (liff.isInClient() && liff.isLoggedIn()) {
-      liff.getProfile().then(profile => {
-        self.profile = profile
-      })
-    } else {
-      let ref = collection(db, 'profiles')
-      let q = query(ref, where("userId", "==", "mumthealthtest"))
-      let querySnapshot = await getDocs(q)
-      if (!querySnapshot.empty) {
-        querySnapshot.forEach(d => {
-          self.profile = d.data()
-        })
-      }
-    }
     const recordId = this.$route.params.recordId
     let ref = doc(db, 'activity_records', recordId)
     const docSnapshot = await getDoc(ref)
@@ -225,12 +211,12 @@ export default defineComponent({
       this.record.id = docSnapshot.id
     }
     ref = collection(db, 'activity_submissions')
-    let q = query(ref, where('userId', '==', self.profile.userId), where('recordId', '==', recordId))
+    let q = query(ref, where('userId', '==', self.$store.state.user.userId), where('recordId', '==', recordId))
     let querySnapshot = await getDocs(q)
     querySnapshot.forEach(s => {
       self.submissions.push(s.data().challengeId)
     })
-    for (const ch of self.profile.challenges) {
+    for (const ch of self.$store.state.profile.challenges) {
       let docRef = doc(db, 'challenges', ch)
       let docSnap = await getDoc(docRef)
       if (docSnap.exists()) {
