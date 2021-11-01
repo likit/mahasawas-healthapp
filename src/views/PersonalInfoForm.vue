@@ -47,6 +47,11 @@
           </ion-col>
         </ion-row>
       </ion-grid>
+      <ion-fab vertical="bottom" horizontal="center" slot="fixed">
+        <ion-fab-button @click="$router.push({ name: 'Profile' })">
+          <ion-icon :icon="arrowBackCircle"></ion-icon>
+        </ion-fab-button>
+      </ion-fab>
     </ion-content>
   </ion-page>
 </template>
@@ -65,9 +70,12 @@ import {
   IonButton,
   IonListHeader,
   IonLabel,
+  IonFab,
+  IonFabButton,
+  IonIcon
 } from '@ionic/vue';
 
-import { helpCircleOutline } from 'ionicons/icons'
+import { helpCircleOutline, arrowBackCircle } from 'ionicons/icons'
 import {defineComponent} from 'vue';
 import { db } from '../firebase'
 import { collection, addDoc } from '@firebase/firestore'
@@ -89,18 +97,14 @@ export default defineComponent({
     IonButton,
     IonListHeader,
     IonLabel,
+    IonFab,
+    IonFabButton,
+    IonIcon
   },
   setup () {
     return {
       helpCircleOutline,
-    }
-  },
-  data () {
-    return {
-      firstname: null,
-      lastname: null,
-      title: null,
-      phone: null,
+      arrowBackCircle
     }
   },
   computed: {
