@@ -23,6 +23,7 @@ const routes = [
       },
       {
         path: 'exercise',
+        name: 'Exercise',
         component: () => import('../views/Exercise')
       },
       {

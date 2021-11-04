@@ -6,7 +6,6 @@
           <ion-col>
             <ion-text>
               <h1>Walk Record Detail</h1>
-              submission: {{ submissions }}
             </ion-text>
           </ion-col>
         </ion-row>
@@ -218,7 +217,7 @@ export default defineComponent({
         const ref = doc(db, 'activity_records', this.record.id)
         deleteDoc(ref).then(async () => {
           await self.presentAlert()
-          self.$store.dispatch('deleteActivity', { activity: 'walking', id: this.record.id })
+          self.$store.dispatch('deleteActivity', this.record.id)
           self.$router.push({ name: 'WalkRecord' })
         })
       }
@@ -264,7 +263,6 @@ export default defineComponent({
   },
   async mounted() {
     this.route = useRoute()
-    console.log(this.route.params.recordId)
   }
 })
 </script>

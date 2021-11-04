@@ -27,7 +27,7 @@
                 <ion-text>Next level</ion-text>
                 <ion-progress-bar value="0.0"></ion-progress-bar>
                 <ion-list>
-                  <ion-item lines="full" v-for="rec in records" :key="rec.id">
+                  <ion-item lines="full" v-for="rec in activity_records.slice(0, 4)" :key="rec.id">
                     <ion-label>
                       {{ rec.type }}
                     </ion-label>
@@ -121,7 +121,7 @@ export default defineComponent({
     }
   },
   computed: {
-    ...mapState(['user', 'profile']),
+    ...mapState(['user', 'profile', 'activity_records']),
   },
   // mapState is async operation, we need to watch for when the data is ready
   watch: {
@@ -160,19 +160,19 @@ export default defineComponent({
       })
     },
     async loadActivities(userId) {
-      const self = this
-      let ref = collection(db, 'activity_records')
-      let q = query(ref,
-          where('userId', '==', userId),
-          orderBy('startDateTime', 'desc'),
-          limit(4)
-      )
-      let querySnapshot = await getDocs(q)
-      querySnapshot.forEach(d => {
-        let data = d.data()
-        data.id = d.id
-        self.records.push(data)
-      })
+      if (this.activity_records.length == 0) {
+        let ref = collection(db, 'activity_records')
+        let q = query(ref,
+            where('userId', '==', userId),
+            orderBy('startDateTime', 'desc'),
+        )
+        let querySnapshot = await getDocs(q)
+        querySnapshot.forEach(d => {
+          let data = d.data()
+          data.id = d.id
+          this.$store.dispatch('addActivity', data)
+        })
+      }
     },
     async loadChallenges() {
       const self = this
@@ -187,7 +187,7 @@ export default defineComponent({
         })
       }
     }
-  }
+  },
 });
 </script>
 

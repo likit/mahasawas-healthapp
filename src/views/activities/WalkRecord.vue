@@ -13,7 +13,7 @@
       <ion-row>
         <ion-col>
           <ion-list>
-            <ion-item detail v-for="record in activity_records.walking"
+            <ion-item detail v-for="record in walkRecords"
                       :key="record.id" @click="goToDetail(record.id)">
               <ion-label>
                 {{ record.startDateTime.toDate().toLocaleString() }}
@@ -33,14 +33,14 @@
       </ion-row>
       <ion-row>
         <ion-col>
-          <ion-button expand="block" href="/activities/walk-record-form">
+          <ion-button expand="block" @click="$router.push({ name: 'WalkRecordForm' })">
             Add
           </ion-button>
         </ion-col>
       </ion-row>
     </ion-grid>
     <ion-fab vertical="bottom" horizontal="center" slot="fixed">
-      <ion-fab-button @click="$router.push({ name: 'Home' })">
+      <ion-fab-button @click="$router.push({ name: 'Exercise' })">
         <ion-icon :icon="arrowBackCircle"></ion-icon>
       </ion-fab-button>
     </ion-fab>
@@ -66,9 +66,7 @@ import {
 } from '@ionic/vue';
 
 import {defineComponent} from 'vue';
-import { db } from '../../firebase'
 import { arrowBackCircle } from 'ionicons/icons'
-import { collection, getDocs, query, where, orderBy } from 'firebase/firestore'
 import {mapState} from "vuex";
 
 export default defineComponent({
@@ -94,33 +92,15 @@ export default defineComponent({
     }
   },
   computed: {
-    ...mapState(['profile', 'user', 'activity_records'])
+    ...mapState(['user', 'activity_records']),
+    walkRecords () {
+      return this.activity_records.filter(d => d.type === 'walking')
+    }
   },
   methods: {
     goToDetail (recordId) {
       this.$router.push({ name: 'WalkRecordDetail', params: { recordId: recordId}})
-    },
-    async loadRecords () {
-      this.records = []
-      const ref = collection(db, 'activity_records')
-      const q = query(ref,
-          where('userId', '==', this.$store.state.user.userId),
-          where("type", "==", "walking"),
-          orderBy('startDateTime', 'desc'))
-      const querySnapshot = await getDocs(q)
-      querySnapshot.forEach(d=>{
-        let data = d.data()
-        data.id = d.id
-        this.$store.dispatch('addActivity', {
-          activity: 'walking',
-          data: data
-        })
-      })
     }
-  },
-  mounted () {
-    if (this.activity_records.walking.length === 0)
-      this.loadRecords()
   }
 })
 </script>

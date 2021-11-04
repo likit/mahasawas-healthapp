@@ -17,9 +17,7 @@ const store = createStore({
             updateDateTime: null,
             userId: null
         },
-        activity_records: {
-            walking: []
-        }
+        activity_records: [],
     },
     mutations: {
         SET_USER(state, user) {
@@ -29,11 +27,10 @@ const store = createStore({
             state.profile = profile
         },
         ADD_ACTIVITY(state, payload) {
-            state.activity_records[payload.activity].push(payload.data)
+            state.activity_records.push(payload)
         },
         DELETE_ACTIVITY(state, payload) {
-            state.activity_records[payload.activity] =
-                state.activity_records[payload.activity].filter(d=> d.id !== payload.id )
+            state.activity_records = state.activity_records.filter(d => d.id !== payload )
         }
     },
     actions: {

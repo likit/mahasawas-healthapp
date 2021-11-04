@@ -89,10 +89,9 @@ import {
 } from '@ionic/vue';
 
 import { helpCircleOutline } from 'ionicons/icons'
-import {defineComponent} from 'vue';
+import { defineComponent } from 'vue';
 import { db } from '../../firebase'
-import { collection, addDoc } from '@firebase/firestore'
-import {mapState} from "vuex";
+import { collection, addDoc, Timestamp } from '@firebase/firestore'
 
 export default defineComponent({
   name: "WalkRecordForm",
@@ -141,18 +140,8 @@ export default defineComponent({
       let delta = end - start
       return (delta / 60000) * 5.23 * this.intensity
     },
-    ...mapState(['profile', 'user'])
   },
   methods: {
-    clearForm () {
-      const self = this
-      self.startDateTime = new Date().toISOString()
-      self.endDateTime = new Date().toISOString()
-      self.distance = 0
-      self.steps = 0
-      self.calories = 0
-      self.intensity = 1
-    },
     async presentAlert() {
       const alert = await alertController
           .create({
@@ -168,29 +157,30 @@ export default defineComponent({
       console.log('onDidDismiss resolved with role', role);
     },
     saveData () {
-      const self = this
-      // TODO: add start, end datetime validation
-      if ((self.startDateTime != '' || self.startDateTime != null)
-          && (self.endDateTime != '' || self.endDateTime != null)
-          && (self.startDateTime !== self.endDateTime)
-          && (self.startDateTime < self.endDateTime)) {
+      if (this.isFormValid) {
         const ref = collection(db, 'activity_records')
-        addDoc(ref, {
-          userId: self.user.userId,
-          startDateTime: new Date(self.startDateTime),
-          endDateTime: new Date(self.endDateTime),
-          distance: self.distance,
-          steps: self.steps,
-          calories: self.calories,
-          estimatedCalories: self.estimatedCal,
-          createdAt: new Date(),
+        let data = {
+          userId: this.$store.state.user.userId,
+          startDateTime: Timestamp.fromDate(new Date(this.startDateTime)),
+          endDateTime: Timestamp.fromDate(new Date(this.endDateTime)),
+          distance: this.distance,
+          steps: this.steps,
+          calories: this.calories,
+          estimatedCalories: this.estimatedCal,
+          createdAt: Timestamp.fromDate(new Date()),
           type: 'walking'
-        }).then(()=>{
-          self.clearForm()
-          self.$router.push({ name: 'WalkRecord' })
+        }
+        addDoc(ref, data).then((docRef)=>{
+          data.id = docRef.id
+          this.$store.dispatch('addActivity',  data)
+          this.$router.push({ name: 'WalkRecord' })
         })
       }
     }
+  },
+  mounted() {
+    console.log(this.$store.state.user)
+    console.log(this.$store.state.activity_records.length)
   }
 })
 </script>
