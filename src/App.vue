@@ -27,8 +27,8 @@ export default defineComponent({
         }
         liff.getProfile().then(async profile => {
           const userRef = collection(db, "users")
-          const q = query(userRef, where('userId', '==', profile.userId))
-          const querySnapshot = await getDocs(q)
+          let q = query(userRef, where('userId', '==', profile.userId))
+          let querySnapshot = await getDocs(q)
           if (querySnapshot.empty) {
             addDoc(userRef, profile).then(() => {
               let proRef = collection(db, "profiles")
@@ -52,6 +52,12 @@ export default defineComponent({
             })
           }
           self.$store.dispatch('updateUser', profile)
+          let ref = collection(db, 'profiles')
+          q = query(ref, where("userId", "==", profile.userId))
+          querySnapshot = await getDocs(q)
+          querySnapshot.forEach(d => {
+            self.$store.dispatch('updateProfile', d.data())
+          })
         })
       })
     }
