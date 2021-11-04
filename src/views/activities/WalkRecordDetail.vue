@@ -218,6 +218,7 @@ export default defineComponent({
         const ref = doc(db, 'activity_records', this.record.id)
         deleteDoc(ref).then(async () => {
           await self.presentAlert()
+          self.$store.dispatch('deleteActivity', { activity: 'walking', id: this.record.id })
           self.$router.push({ name: 'WalkRecord' })
         })
       }

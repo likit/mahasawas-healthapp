@@ -13,7 +13,8 @@
       <ion-row>
         <ion-col>
           <ion-list>
-            <ion-item detail v-for="record in records" :key="record.id" @click="goToDetail(record.id)">
+            <ion-item detail v-for="record in activity_records.walking"
+                      :key="record.id" @click="goToDetail(record.id)">
               <ion-label>
                 {{ record.startDateTime.toDate().toLocaleString() }}
                 <p>
@@ -92,31 +93,34 @@ export default defineComponent({
       arrowBackCircle,
     }
   },
-  data () {
-    return {
-      records: []
-    }
-  },
   computed: {
-    ...mapState(['profile', 'user'])
+    ...mapState(['profile', 'user', 'activity_records'])
   },
   methods: {
     goToDetail (recordId) {
       this.$router.push({ name: 'WalkRecordDetail', params: { recordId: recordId}})
+    },
+    async loadRecords () {
+      this.records = []
+      const ref = collection(db, 'activity_records')
+      const q = query(ref,
+          where('userId', '==', this.$store.state.user.userId),
+          where("type", "==", "walking"),
+          orderBy('startDateTime', 'desc'))
+      const querySnapshot = await getDocs(q)
+      querySnapshot.forEach(d=>{
+        let data = d.data()
+        data.id = d.id
+        this.$store.dispatch('addActivity', {
+          activity: 'walking',
+          data: data
+        })
+      })
     }
   },
-  async mounted () {
-    const ref = collection(db, 'activity_records')
-    const q = query(ref,
-        where('userId', '==', this.$store.state.user.userId),
-        where("type", "==", "walking"),
-        orderBy('startDateTime', 'desc'))
-    const querySnapshot = await getDocs(q)
-    querySnapshot.forEach(d=>{
-      let data = d.data()
-      data.id = d.id
-      this.records.push(data)
-    })
+  mounted () {
+    if (this.activity_records.walking.length === 0)
+      this.loadRecords()
   }
 })
 </script>
