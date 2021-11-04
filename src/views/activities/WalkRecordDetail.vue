@@ -6,6 +6,7 @@
           <ion-col>
             <ion-text>
               <h1>Walk Record Detail</h1>
+              submission: {{ submissions }}
             </ion-text>
           </ion-col>
         </ion-row>
@@ -49,7 +50,8 @@
               </ion-label>
               <ion-select v-model="selectedChallenges" multiple="true">
                 <ion-select-option
-                    v-for="ch in challenges.filter(c=> submissions.indexOf(c.id) < 0 )" :key="ch.id" :value="ch.id">
+                    v-for="ch in challenges.filter(c=> submissions.indexOf(c.id) < 0 )"
+                      :key="ch.id" :value="ch.id">
                   {{ ch.title}}
                 </ion-select-option>
               </ion-select>
@@ -69,7 +71,7 @@
             </ion-button>
           </ion-col>
         </ion-row>
-        <ion-row>
+        <ion-row v-if="submissions.length > 0">
           <ion-col>
             <ion-list-header>
               <ion-label>โครงการที่ส่งผลแล้ว</ion-label>
@@ -81,7 +83,7 @@
         </ion-row>
       </ion-grid>
       <ion-fab vertical="bottom" horizontal="center" slot="fixed">
-        <ion-fab-button @click="$router.push({ name: 'Home' })">
+        <ion-fab-button @click="$router.push({ name: 'WalkRecord' })">
           <ion-icon :icon="arrowBackCircle"></ion-icon>
         </ion-fab-button>
       </ion-fab>
@@ -110,9 +112,11 @@ import {
 } from '@ionic/vue';
 
 import {defineComponent} from 'vue';
+import { useRoute } from 'vue-router';
 import { db } from '../../firebase'
 import { arrowBackCircle } from 'ionicons/icons'
 import {doc, getDoc, getDocs, collection, deleteDoc, query, where, addDoc } from 'firebase/firestore'
+import {mapState} from "vuex";
 
 export default defineComponent({
   name: "WalkRecordDetail",
@@ -141,14 +145,17 @@ export default defineComponent({
   },
   data() {
     return {
-      profile: {
-        challenges: [],
-        userId: null
+      record: {
+        startDateTime: null,
+        distances: null,
+        estimatedCalories: null,
+        calories: null,
+        steps: null
       },
-      record: {},
       challenges: [],
       submissions: [],
       selectedChallenges: [],
+      route: null,
     }
   },
   computed: {
@@ -161,9 +168,50 @@ export default defineComponent({
     submissableChallenges () {
       const self = this
       return this.challenges.filter(ch => self.submissions.indexOf(ch.id) < 0)
+    },
+    ...mapState(['user', 'profile'])
+  },
+  watch: {
+    'route.params.recordId': async function() {
+      this.reset()
+      const recordId = this.route.params.recordId
+      if (recordId !== null && recordId !== undefined) {
+        let ref = collection(db, 'activity_submission')
+        let q = query(ref,
+            where('userId', '==', this.user.userId),
+            where('recordId', '==', recordId))
+        let querySnapshot = await getDocs(q)
+        querySnapshot.docs.forEach(s => {
+          this.submissions.push(s.data().challengeId)
+        })
+
+        for (const ch of this.profile.challenges) {
+          let docRef = doc(db, 'challenges', ch)
+          getDoc(docRef).then((snapshot) => {
+            if (snapshot.exists()) {
+              let data = snapshot.data()
+              data.id = snapshot.id
+              this.challenges.push(data)
+            }
+          })
+        }
+
+        ref = doc(db, 'activity_records', recordId)
+        const docSnapshot = await getDoc(ref)
+        if (docSnapshot.exists()) {
+          this.record = docSnapshot.data()
+          this.record.id = docSnapshot.id
+        }
+      }
     }
   },
   methods: {
+    reset () {
+      this.record = {}
+      this.challenges = []
+      this.submissions = []
+      this.selectedChallenges = []
+    },
     deleteRecord () {
       const self = this
       if (this.record.id) {
@@ -176,10 +224,10 @@ export default defineComponent({
     },
     async submit() {
       for (const ch of this.selectedChallenges) {
-        let ref = collection(db, 'activity_submissions')
+        let ref = collection(db, 'activity_submission')
         addDoc(ref, {
-          recordId: this.$route.params.recordId,
-          userId: this.profile.userId,
+          recordId: this.route.params.recordId,
+          userId: this.user.userId,
           challengeId: ch,
           submittedAt: new Date()
         }).then(async () => {
@@ -198,9 +246,7 @@ export default defineComponent({
             buttons: ['OK'],
           });
       await alert.present();
-
-      const { role } = await alert.onDidDismiss();
-      console.log('onDidDismiss resolved with role', role);
+      await alert.onDidDismiss();
     },
     async presentAlert() {
       const alert = await alertController
@@ -212,35 +258,12 @@ export default defineComponent({
             buttons: ['OK'],
           });
       await alert.present();
-
-      const { role } = await alert.onDidDismiss();
-      console.log('onDidDismiss resolved with role', role);
+      await alert.onDidDismiss();
     },
   },
   async mounted() {
-    const self = this
-    const recordId = this.$route.params.recordId
-    let ref = doc(db, 'activity_records', recordId)
-    const docSnapshot = await getDoc(ref)
-    if (docSnapshot.exists()) {
-      this.record = docSnapshot.data()
-      this.record.id = docSnapshot.id
-    }
-    ref = collection(db, 'activity_submissions')
-    let q = query(ref, where('userId', '==', self.$store.state.user.userId), where('recordId', '==', recordId))
-    let querySnapshot = await getDocs(q)
-    querySnapshot.forEach(s => {
-      self.submissions.push(s.data().challengeId)
-    })
-    for (const ch of self.$store.state.profile.challenges) {
-      let docRef = doc(db, 'challenges', ch)
-      let docSnap = await getDoc(docRef)
-      if (docSnap.exists()) {
-        let data = docSnap.data()
-        data.id = docSnap.id
-        self.challenges.push(data)
-      }
-    }
+    this.route = useRoute()
+    console.log(this.route.params.recordId)
   }
 })
 </script>
