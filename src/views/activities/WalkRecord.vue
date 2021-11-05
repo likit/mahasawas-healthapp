@@ -67,7 +67,7 @@ import {
 
 import {defineComponent} from 'vue';
 import { arrowBackCircle } from 'ionicons/icons'
-import {mapState} from "vuex";
+import {mapGetters, mapState} from "vuex";
 
 export default defineComponent({
   name: "WalkRecord",
@@ -93,9 +93,7 @@ export default defineComponent({
   },
   computed: {
     ...mapState(['user', 'activity_records']),
-    walkRecords () {
-      return this.activity_records.filter(d => d.type === 'walking')
-    }
+    ...mapGetters(['walkRecords']),
   },
   methods: {
     goToDetail (recordId) {
