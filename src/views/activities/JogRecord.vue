@@ -5,18 +5,20 @@
         <ion-row>
           <ion-col>
             <ion-text>
-              <h1>Jog Record</h1>
+              <div class="ion-text-center">
+                <h1>Jog Record</h1>
+              </div>
             </ion-text>
           </ion-col>
         </ion-row>
         <ion-row>
           <ion-col>
             <ion-list>
-              <ion-item detail v-for="record in records" :key="record.id" @click="goToDetail(record.id)">
+              <ion-item detail v-for="record in JogRecords" :key="record.id" @click="goToDetail(record.id)">
                 <ion-label>
                   {{ record.startDateTime.toDate().toLocaleString() }}
                   <p>
-                    Distance {{ record.distance }} km, Est. calories {{ ((record.endDateTime - record.startDateTime) / 60) * 5.23 }}
+                    Distance {{ record.distance }} km, Est. calories {{ record.estimatedCalories.toFixed(1) }}
                   </p>
                 </ion-label>
               </ion-item>
@@ -25,20 +27,39 @@
         </ion-row>
         <ion-row>
           <ion-col>
-            <ion-button expand="block" href="/activities/jog-record-form">
+            <ion-button expand="block" @click="$router.push({name: 'JogRecordForm'})">
               Add
             </ion-button>
           </ion-col>
         </ion-row>
       </ion-grid>
+      <ion-fab vertical="top" horizontal="start" slot="fixed">
+        <ion-fab-button @click="$router.push({ name: 'Exercise' })">
+          <ion-icon :icon="arrowBackCircle"></ion-icon>
+        </ion-fab-button>
+      </ion-fab>
     </ion-content>
   </ion-page>
 </template>
 
 <script>
-import {IonButton, IonCol, IonContent, IonGrid, IonItem, IonLabel, IonList, IonPage, IonRow, IonText} from "@ionic/vue";
-import {collection, getDocs, where, query, orderBy } from "firebase/firestore";
-import {db} from "@/firebase";
+import {
+  IonButton,
+  IonCol,
+  IonContent,
+  IonGrid,
+  IonItem,
+  IonLabel,
+  IonList,
+  IonPage,
+  IonRow,
+  IonText,
+  IonFab,
+  IonFabButton,
+  IonIcon
+} from "@ionic/vue";
+import { arrowBackCircle } from 'ionicons/icons'
+import {mapGetters} from "vuex";
 
 export default {
   name: "JogRecord",
@@ -53,26 +74,22 @@ export default {
     IonList,
     IonItem,
     IonLabel,
+    IonFab,
+    IonFabButton,
+    IonIcon
   },
-  data () {
+  setup () {
     return {
-      records: []
+      arrowBackCircle
     }
+  },
+  computed: {
+    ...mapGetters(['JogRecords'])
   },
   methods: {
     goToDetail (recordId) {
       this.$router.push({ name: 'JogRecordDetail', params: { recordId: recordId}})
     }
-  },
-  async mounted () {
-    const ref = collection(db, 'activity_records')
-    const q = query(ref, where("type", "==", "jogging"), orderBy('startDateTime', 'desc'))
-    const querySnapshot = await getDocs(q)
-    querySnapshot.forEach(d=>{
-      let data = d.data()
-      data.id = d.id
-      this.records.push(data)
-    })
   }
 }
 </script>
