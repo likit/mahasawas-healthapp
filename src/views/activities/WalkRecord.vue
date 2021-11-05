@@ -5,8 +5,10 @@
       <ion-row>
         <ion-col>
           <ion-text>
-            <h1>Walk Record</h1>
-            <p>{{ this.user.displayName }}</p>
+            <div class="ion-text-center">
+              <h1>Walk Record</h1>
+              <p>{{ this.user.displayName }}</p>
+            </div>
           </ion-text>
         </ion-col>
       </ion-row>
@@ -18,13 +20,8 @@
               <ion-label>
                 {{ record.startDateTime.toDate().toLocaleString() }}
                 <p>
-                  Distance {{ record.distance }} km
-                </p>
-                <p>
                   Steps {{ record.steps }}
-                </p>
-                <p>
-                  Est. calories {{ ((record.endDateTime - record.startDateTime) / 60) * 5.23 }}
+                  Est. calories {{ record.estimatedCalories.toFixed(1) }}
                 </p>
               </ion-label>
             </ion-item>
@@ -39,7 +36,7 @@
         </ion-col>
       </ion-row>
     </ion-grid>
-    <ion-fab vertical="bottom" horizontal="center" slot="fixed">
+    <ion-fab vertical="top" horizontal="start" slot="fixed">
       <ion-fab-button @click="$router.push({ name: 'Exercise' })">
         <ion-icon :icon="arrowBackCircle"></ion-icon>
       </ion-fab-button>

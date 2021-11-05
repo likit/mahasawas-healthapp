@@ -5,7 +5,9 @@
         <ion-row>
           <ion-col>
             <ion-text>
-              <h1>Walk Record Detail</h1>
+              <div class="ion-text-center">
+                <h1>Walk Record Detail</h1>
+              </div>
             </ion-text>
           </ion-col>
         </ion-row>
@@ -81,7 +83,7 @@
           </ion-col>
         </ion-row>
       </ion-grid>
-      <ion-fab vertical="bottom" horizontal="center" slot="fixed">
+      <ion-fab vertical="top" horizontal="start" slot="fixed">
         <ion-fab-button @click="$router.push({ name: 'WalkRecord' })">
           <ion-icon :icon="arrowBackCircle"></ion-icon>
         </ion-fab-button>
@@ -159,14 +161,12 @@ export default defineComponent({
   },
   computed: {
     selectedChallengeItems () {
-      const self = this
       return this.challenges.filter(ch => {
-        return self.selectedChallenges.indexOf(ch.id) >= 0
+        return this.selectedChallenges.indexOf(ch.id) >= 0
       })
     },
     submissableChallenges () {
-      const self = this
-      return this.challenges.filter(ch => self.submissions.indexOf(ch.id) < 0)
+      return this.challenges.filter(ch => this.submissions.indexOf(ch.id) < 0)
     },
     ...mapState(['user', 'profile'])
   },
@@ -176,9 +176,7 @@ export default defineComponent({
       const recordId = this.route.params.recordId
       if (recordId !== null && recordId !== undefined) {
         let ref = collection(db, 'activity_submission')
-        let q = query(ref,
-            where('userId', '==', this.user.userId),
-            where('recordId', '==', recordId))
+        let q = query(ref, where('recordId', '==', recordId))
         let querySnapshot = await getDocs(q)
         querySnapshot.docs.forEach(s => {
           this.submissions.push(s.data().challengeId)
@@ -206,19 +204,17 @@ export default defineComponent({
   },
   methods: {
     reset () {
-      this.record = {}
       this.challenges = []
       this.submissions = []
       this.selectedChallenges = []
     },
     deleteRecord () {
-      const self = this
       if (this.record.id) {
         const ref = doc(db, 'activity_records', this.record.id)
         deleteDoc(ref).then(async () => {
-          await self.presentAlert()
-          self.$store.dispatch('deleteActivity', this.record.id)
-          self.$router.push({ name: 'WalkRecord' })
+          await this.presentAlert()
+          this.$store.dispatch('deleteActivity', this.record.id)
+          this.$router.push({ name: 'WalkRecord' })
         })
       }
     },
