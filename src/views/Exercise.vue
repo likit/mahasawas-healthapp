@@ -5,8 +5,10 @@
         <ion-row>
           <ion-col>
             <ion-text class="ion-text-lg-center">
-              <h1>Exercise</h1>
-              <p>{{ $store.state.user.displayName }}</p>
+              <div class="ion-text-center">
+                <h1>Exercise</h1>
+                <p>{{ displayName }}</p>
+              </div>
             </ion-text>
           </ion-col>
         </ion-row>
@@ -88,9 +90,7 @@ import {
   IonText,
 } from '@ionic/vue';
 import {defineComponent} from 'vue';
-import {collection, getDocs, query, where} from "firebase/firestore";
-import {db} from "@/firebase";
-import {mapState} from "vuex";
+import {mapGetters, mapState} from "vuex";
 export default defineComponent({
   name: "Exercise",
   components: {
@@ -118,22 +118,18 @@ export default defineComponent({
     }
   },
   computed: {
-    ...mapState(['profile', 'user'])
+    ...mapGetters(['displayName', 'userId']),
+    ...mapState(['activity_records'])
   },
   methods: {
-    async loadActivities () {
-      const self = this
-      let ref = collection(db, 'activity_records')
-      let q = query(ref, where('userId', '==', self.$store.state.user.userId))
-      let querySnapshot = await getDocs(q)
-      querySnapshot.forEach(d=>{
-        let data = d.data()
-        self.total++
-        self.counts[data.type]++
+    loadActivities () {
+      this.activity_records.forEach(d=>{
+        this.total++
+        this.counts[d.type]++
       })
     }
   },
-  async mounted () {
+  mounted () {
     this.loadActivities()
   }
 });
