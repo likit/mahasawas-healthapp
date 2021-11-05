@@ -5,8 +5,10 @@
         <ion-row>
           <ion-col>
             <ion-text>
-              <h1>Groups</h1>
-              <p>{{ userId }}</p>
+              <div class="ion-text-center">
+                <h1>Groups</h1>
+                <p>{{ displayName }}</p>
+              </div>
             </ion-text>
           </ion-col>
         </ion-row>
@@ -25,7 +27,7 @@
           </ion-col>
         </ion-row>
       </ion-grid>
-      <ion-fab vertical="bottom" horizontal="center" slot="fixed">
+      <ion-fab vertical="top" horizontal="start" slot="fixed">
         <ion-fab-button @click="$router.push({ name: 'Profile' })">
           <ion-icon :icon="arrowBackCircle"></ion-icon>
         </ion-fab-button>
@@ -76,7 +78,7 @@ export default defineComponent({
     }
   },
   computed: {
-    ...mapGetters(['userId']),
+    ...mapGetters(['displayName']),
     ...mapState(['groups'])
   }
 })

@@ -5,7 +5,9 @@
         <ion-row>
           <ion-col>
             <ion-text class="ion-text-lg-center">
-              <h1>Profile</h1>
+              <div class="ion-text-center">
+                <h1>Profile</h1>
+              </div>
             </ion-text>
             <ion-item inset="true">
               <ion-avatar slot="start">
