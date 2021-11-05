@@ -51,7 +51,10 @@
                 {{ ch.pitch }}
                 <ion-button v-if="profile.challenges.indexOf(ch.id) < 0"
                             @click="addChallenge(ch.id)">Join now</ion-button>
-                <ion-button v-else @click="addChallenge(ch.id)">Detail</ion-button>
+                <ion-button v-else
+                            @click="$router.push({ name: 'ChallengeDetail', params: { recordId: ch.id}})">
+                  Detail
+                </ion-button>
               </ion-card-content>
             </ion-card>
           </ion-col>

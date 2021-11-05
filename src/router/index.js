@@ -117,6 +117,11 @@ const routes = [
     name: 'BikeRecordForm',
     component: () => import('../views/activities/BikeRecordForm')
   },
+  {
+    path: '/challenges/:recordId',
+    name: 'ChallengeDetail',
+    component: () => import('../views/ChallengeDetail')
+  },
 ]
 
 const router = createRouter({

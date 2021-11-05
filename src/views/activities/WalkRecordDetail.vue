@@ -257,7 +257,7 @@ export default defineComponent({
       await alert.onDidDismiss();
     },
   },
-  async mounted() {
+  mounted() {
     this.route = useRoute()
   }
 })
