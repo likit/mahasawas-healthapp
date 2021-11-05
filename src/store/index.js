@@ -18,6 +18,16 @@ const store = createStore({
             userId: null
         },
         activity_records: [],
+        groups: [],
+        challenges: [],
+    },
+    getters: {
+        walkRecords: state => {
+            return state.activity_records.filter(d => d.type === 'walking')
+        },
+        JogRecords: state => {
+            return state.activity_records.filter(d => d.type === 'jogging')
+        },
     },
     mutations: {
         SET_USER(state, user) {
@@ -31,6 +41,15 @@ const store = createStore({
         },
         DELETE_ACTIVITY(state, payload) {
             state.activity_records = state.activity_records.filter(d => d.id !== payload )
+        },
+        ADD_GROUP(state, payload) {
+            state.groups.push(payload)
+        },
+        ADD_CHALLENGE(state, payload) {
+            state.challenges.push(payload)
+        },
+        ADD_USER_CHALLENGE(state, payload) {
+            state.profile.challenges.push(payload)
         }
     },
     actions: {
@@ -45,6 +64,15 @@ const store = createStore({
         },
         deleteActivity({ commit }, payload) {
             commit('DELETE_ACTIVITY', payload)
+        },
+        addGroup({ commit }, payload) {
+            commit('ADD_GROUP', payload)
+        },
+        addChallenge({ commit }, payload) {
+            commit('ADD_CHALLENGE', payload)
+        },
+        addUserChallenge({ commit }, payload) {
+            commit('ADD_USER_CHALLENGE', payload)
         }
     }
 })
