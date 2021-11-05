@@ -30,6 +30,7 @@ export default defineComponent({
           let q = query(userRef, where('userId', '==', profile.userId))
           let querySnapshot = await getDocs(q)
           if (querySnapshot.empty) {
+            profile.isActive = true
             addDoc(userRef, profile).then(() => {
               let proRef = collection(db, "profiles")
               let newProfile = {
