@@ -22,6 +22,12 @@ const store = createStore({
         challenges: [],
     },
     getters: {
+        userId: state => {
+            return state.user.userId
+        },
+        displayName: state => {
+            return state.user.displayName
+        },
         walkRecords: state => {
             return state.activity_records.filter(d => d.type === 'walking')
         },

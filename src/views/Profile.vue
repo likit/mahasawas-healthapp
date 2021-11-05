@@ -25,7 +25,9 @@
                 <ion-item-divider>
                   <ion-label>Settings</ion-label>
                 </ion-item-divider>
-                <ion-item detail inset="true" href="/profile/personal-info-edit" class="ion-margin-bottom">
+                <ion-item detail inset="true"
+                          @click="$router.push({ name: 'PersonalInfoForm' })"
+                          class="ion-margin-bottom">
                   <ion-icon slot="start" :icon="personOutline"></ion-icon>
                   <ion-label>Personal Info</ion-label>
                 </ion-item>
@@ -36,7 +38,7 @@
                     Groups
                   </ion-label>
                 </ion-item-divider>
-                <ion-item detail inset="true" href="/profile/groups">
+                <ion-item detail inset="true" @click="$router.push({ name: 'GroupList' })">
                   <ion-icon slot="start" :icon="peopleOutline"></ion-icon>
                   <ion-label>List</ion-label>
                 </ion-item>
@@ -47,7 +49,7 @@
                     Information
                   </ion-label>
                 </ion-item-divider>
-                <ion-item detail inset="true" href="/tabs/home">
+                <ion-item detail inset="true" @click="$router.push({ name: 'Home'})">
                   <ion-icon slot="start" :icon="alertCircleOutline"></ion-icon>
                   <ion-label>Term & Condition</ion-label>
                 </ion-item>

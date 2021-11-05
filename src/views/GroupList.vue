@@ -6,7 +6,7 @@
           <ion-col>
             <ion-text>
               <h1>Groups</h1>
-              <p>{{ $store.state.user.userId }}</p>
+              <p>{{ userId }}</p>
             </ion-text>
           </ion-col>
         </ion-row>
@@ -51,9 +51,8 @@ import {
 } from '@ionic/vue';
 
 import {defineComponent} from 'vue';
-import { db } from '../firebase'
 import { arrowBackCircle } from 'ionicons/icons'
-import { collection, getDocs, query, where } from 'firebase/firestore'
+import {mapGetters, mapState} from "vuex";
 
 export default defineComponent({
   name: "WalkRecord",
@@ -76,28 +75,9 @@ export default defineComponent({
       arrowBackCircle
     }
   },
-  data () {
-    return {
-      groups: []
-    }
-  },
   computed: {
-    userId: function() {
-      return this.$store.state.user.userId
-    }
-  },
-  watch: {
-    userId: async function(newValue) {
-      const self = this
-      const ref = collection(db, 'userGroups')
-      const q = query(ref, where("members", "array-contains", newValue))
-      const querySnapshot = await getDocs(q)
-      querySnapshot.forEach(d=>{
-        let data = d.data()
-        data.id = d.id
-        self.groups.push(data)
-      })
-    }
+    ...mapGetters(['userId']),
+    ...mapState(['groups'])
   }
 })
 </script>
