@@ -79,7 +79,7 @@ import { helpCircleOutline, arrowBackCircle } from 'ionicons/icons'
 import {defineComponent} from 'vue';
 import { db } from '../firebase'
 import { collection, addDoc } from '@firebase/firestore'
-import {getDocs, query, where, doc, updateDoc } from "firebase/firestore";
+import {getDocs, query, where, doc, updateDoc, Timestamp } from "firebase/firestore";
 import {mapState} from "vuex";
 
 export default defineComponent({
@@ -112,39 +112,38 @@ export default defineComponent({
   },
   methods: {
     async saveData() {
-      const self = this
       const ref = collection(db, 'profiles')
-      let q = query(ref, where('userId', '==', self.user.userId))
+      let q = query(ref, where('userId', '==', this.user.userId))
       let querySnap = await getDocs(q)
       if (querySnap.empty) {
         let newProfile = {
-          userId: self.user.userId,
-          updateDateTime: new Date(),
-          firstname: self.profile.firstname,
-          lastname: self.profile.lastname,
-          title: self.profile.title,
-          phone: self.profile.phone,
+          userId: this.user.userId,
+          updateDateTime: Timestamp.fromDate(new Date()),
+          firstname: this.profile.firstname,
+          lastname: this.profile.lastname,
+          title: this.profile.title,
+          phone: this.profile.phone,
           challenges: [],
         }
         addDoc(ref, newProfile).then(() => {
-          self.$store.dispatch('updateProfile', newProfile)
-          self.$router.push({name: 'Profile'})
+          this.$store.dispatch('updateProfile', newProfile)
+          this.$router.push({name: 'Profile'})
         })
       } else {
         querySnap.forEach(d => {
           let docRef = doc(db, 'profiles', d.id)
           let updatedProfile = {
-            userId: self.user.userId,
-            title: self.profile.title,
-            firstname: self.profile.firstname,
-            lastname: self.profile.lastname,
-            phone: self.profile.phone,
-            updateDateTime: new Date(),
-            challenges: self.profile.challenges
+            userId: this.user.userId,
+            title: this.profile.title,
+            firstname: this.profile.firstname,
+            lastname: this.profile.lastname,
+            phone: this.profile.phone,
+            updateDateTime: Timestamp.fromDate(new Date()),
+            challenges: this.profile.challenges
           }
           updateDoc(docRef, updatedProfile).then(() => {
-            self.$store.dispatch('updateProfile', updatedProfile)
-            self.$router.push({name: 'Profile'})
+            this.$store.dispatch('updateProfile', updatedProfile)
+            this.$router.push({name: 'Profile'})
           })
         })
       }
