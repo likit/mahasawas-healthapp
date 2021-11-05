@@ -40,7 +40,7 @@
             </ion-card>
           </ion-col>
         </ion-row>
-        <ion-row v-for="ch in allChallenges" :key="ch.id">
+        <ion-row v-for="ch in challenges" :key="ch.id">
           <ion-col>
             <ion-card>
               <img src="https://source.unsplash.com/J154nEkpzlQ">
@@ -83,7 +83,7 @@ import {
 } from '@ionic/vue';
 import {defineComponent} from 'vue';
 import { ribbonOutline } from 'ionicons/icons';
-import { collection, getDocs, query, where, orderBy, limit, doc, updateDoc } from "firebase/firestore";
+import { collection, getDocs, query, where, orderBy, doc, updateDoc } from "firebase/firestore";
 import {db} from "@/firebase";
 import { mapState} from "vuex";
 
@@ -113,15 +113,8 @@ export default defineComponent({
       ribbonOutline,
     }
   },
-  data () {
-    return {
-      records: [],
-      allChallenges: [],
-      groups: []
-    }
-  },
   computed: {
-    ...mapState(['user', 'profile', 'activity_records']),
+    ...mapState(['user', 'profile', 'activity_records', 'challenges', 'groups']),
   },
   // mapState is async operation, we need to watch for when the data is ready
   watch: {
@@ -133,30 +126,27 @@ export default defineComponent({
   },
   methods: {
     async addChallenge(challengeId) {
-      if (this.profile.challenges.indexOf(challengeId) >= 0) {
-        return
-      }
-      const self = this
-      let ref = collection(db, 'profiles')
-      let q = query(ref, where('userId', '==', self.user.userId))
-      let querySnapshot = await getDocs(q)
-      if (!querySnapshot.empty) {
-        querySnapshot.forEach(d => {
-          let docRef = doc(db, 'profiles', d.id)
-          self.profile.challenges.push(challengeId)
-          updateDoc(docRef, { challenges: self.profile.challenges})
-        })
+      if (this.profile.challenges.indexOf(challengeId) < 0) {
+        let ref = collection(db, 'profiles')
+        let q = query(ref, where('userId', '==', this.user.userId))
+        let querySnapshot = await getDocs(q)
+        if (!querySnapshot.empty) {
+          querySnapshot.forEach(d => {
+            let docRef = doc(db, 'profiles', d.id)
+            this.$store.dispatch('addUserChallenge', challengeId)
+            updateDoc(docRef, { challenges: this.profile.challenges})
+          })
+        }
       }
     },
-    async loadGroups(userId) {
-      const self = this
+    async loadGroups (userId) {
       let ref = collection(db, 'userGroups')
       let q = query(ref, where("members", "array-contains", userId))
       let querySnapshot = await getDocs(q)
       querySnapshot.forEach(d => {
         let data = d.data()
         data.id = d.id
-        self.groups.push(data)
+        this.$store.dispatch('addGroup', data)
       })
     },
     async loadActivities(userId) {
@@ -174,16 +164,15 @@ export default defineComponent({
         })
       }
     },
-    async loadChallenges() {
-      const self = this
-      for (const g of self.groups) {
+    async loadChallenges () {
+      for (const g of this.groups) {
         let ref = collection(db, 'challenges')
         let q = query(ref, where('groups', 'array-contains', g.id))
         let querySnapshot = await getDocs(q)
         querySnapshot.forEach(d => {
           let data = d.data()
           data.id = d.id
-          self.allChallenges.push(data)
+          this.$store.dispatch('addChallenge', data)
         })
       }
     }
