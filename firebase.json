@@ -1,5 +1,6 @@
 {
   "hosting": {
+    "target": "mahidol",
     "public": "dist",
     "ignore": [
       "firebase.json",
@@ -7,6 +8,10 @@
       "**/node_modules/**"
     ],
     "rewrites": [
+      {
+        "source": "/api/authenticate",
+        "function": "authenticate"
+      },
       {
         "source": "**",
         "destination": "/index.html"

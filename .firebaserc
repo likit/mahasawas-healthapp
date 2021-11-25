@@ -1,5 +1,14 @@
 {
   "projects": {
     "default": "uberhealth-c1541"
+  },
+  "targets": {
+    "uberhealth-c1541": {
+      "hosting": {
+        "mahidol": [
+          "uhealth-mahidol"
+        ]
+      }
+    }
   }
 }

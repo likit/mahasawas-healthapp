@@ -3,10 +3,6 @@ import Tabs from '../views/Tabs'
 
 const routes = [
   {
-    path: '/',
-    redirect: '/tabs/home'
-  },
-  {
     path: '/tabs',
     name: 'Tabs',
     component: Tabs,

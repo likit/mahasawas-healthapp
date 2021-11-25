@@ -9,7 +9,7 @@
                 <ion-item lines="none">
                   <ion-icon slot="start" class="badge" size="large" :icon="ribbonOutline"></ion-icon>
                   <ion-text color="primary">
-                    Welcome {{ $store.state.user.displayName }}
+                    The token is: {{ authToken }}
                   </ion-text>
                 </ion-item>
               </ion-card-content>
@@ -126,6 +126,14 @@ export default defineComponent({
       await this.loadChallenges()
       await this.loadActivities(newValue.userId)
     }
+  },
+  data () {
+    return {
+      authToken: null
+    }
+  },
+  mounted () {
+    this.authToken = this.$route.query.token
   },
   methods: {
     async addChallenge(challengeId) {
