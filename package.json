@@ -1,6 +1,6 @@
 {
-  "name": "uberhealth Mahidol",
-  "version": "0.5",
+  "name": "uhealth",
+  "version": "0.5.0",
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
