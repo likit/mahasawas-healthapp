@@ -3,6 +3,10 @@ import Tabs from '../views/Tabs'
 
 const routes = [
   {
+    path: '/',
+    redirect: '/tabs'
+  },
+  {
     path: '/tabs',
     name: 'Tabs',
     component: Tabs,
@@ -37,6 +41,11 @@ const routes = [
         component: () => import('../views/Soon')
       },
     ]
+  },
+  {
+    path: '/prohibition',
+    name: 'Prohibition',
+    component: () => import('../views/Prohibition')
   },
   {
     path: '/profile/personal-info-edit',
