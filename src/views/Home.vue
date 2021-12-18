@@ -9,7 +9,7 @@
                 <ion-item lines="none">
                   <ion-icon slot="start" class="badge" size="large" :icon="ribbonOutline"></ion-icon>
                   <ion-text color="primary">
-                    The token is: {{ authToken }}
+                    The user is: {{ profile.firstname }} {{ profile.lastname }}
                   </ion-text>
                 </ion-item>
               </ion-card-content>
@@ -86,9 +86,10 @@ import {
 } from '@ionic/vue';
 import {defineComponent} from 'vue';
 import { ribbonOutline } from 'ionicons/icons';
-import { collection, getDocs, query, where, orderBy, doc, updateDoc } from "firebase/firestore";
+import { collection, getDocs, query, where, orderBy, doc, updateDoc, addDoc } from "firebase/firestore";
 import {db} from "@/firebase";
 import { mapState} from "vuex";
+import axios from "axios";
 
 export default defineComponent({
   name: 'Home',
@@ -134,8 +135,78 @@ export default defineComponent({
   },
   mounted () {
     this.authToken = this.$route.query.token
+    if (this.authToken !== null && this.authToken !== undefined) {
+      this.loadProfile()
+    } else {
+      // this.$router.push({ name: 'Prohibition' })
+      this.setUpUser({
+        userId: 'mahidol-test',
+        userName: 'mahidol-test',
+        firstNameTh: 'ลิขิต',
+        lastNameTh: 'ปรียานนท์',
+        titleNameTh: 'ดร.',
+        facultyNameTh: 'คณะเทคนิคการแพทย์',
+        groupType: 'staff',
+      })
+    }
   },
   methods: {
+    async setUpUser(data) {
+      let ref = collection(db, 'users')
+      let q = query(ref, where('userId', '==', data.userId))
+      let querySnapshot = await getDocs(q)
+      let userData = {
+        userId: data.userId,
+        userName: data.userName
+      }
+      if (querySnapshot.empty) {
+        await addDoc(ref, userData)
+      }
+      this.$store.commit('SET_USER', userData)
+      let profileData = {
+        firstNameTh: data.firstNameTh,
+        lastNameTh: data.lastNameTh,
+        titleNameTh: data.titleNameTh,
+        facultyNameTh: data.facultyNameTh,
+        groupType: data.groupType,
+        phone: '',
+        challenges: [],
+        userId: data.userId
+      }
+      this.$store.commit('SET_PROFILE', {
+        firstname: data.firstNameTh,
+        lastname: data.lastNameTh,
+        title: data.titleNameTh,
+        phone: null,
+        userId: data.userId,
+        updateDateTime: null,
+        challanges: [],
+      })
+      let profileRef = collection(db, 'profiles')
+      q = query(profileRef, where('userId', '==', data.userId))
+      querySnapshot = await getDocs(q)
+      if (querySnapshot.empty) {
+        await addDoc(profileRef, profileData)
+      } else {
+        for (let d of querySnapshot.docs) {
+          let docRef = doc(db, 'profiles', d.id)
+          console.log('Updating the user profile...')
+          await updateDoc(docRef, profileData)
+        }
+      }
+    },
+    async loadProfile() {
+      await axios.post('https://dcu-sitauth.mahidol.ac.th/auth/v1/sso/profile',
+          {
+            "token": this.authToken,
+            "clientId": "8fd61a82-ba20-4278-82b0-5b175b489189",
+            "clientSecret": "x67IirZdDTCHp1pLor6mAdVT107qZ0Yv1mi8O6VB"
+          }).then(async res => {
+            this.setUpUser(res)
+      }).catch(e => {
+        alert(e.toString())
+      })
+    },
     async addChallenge(challengeId) {
       if (this.profile.challenges.indexOf(challengeId) < 0) {
         let ref = collection(db, 'profiles')

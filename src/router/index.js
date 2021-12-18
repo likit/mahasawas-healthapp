@@ -4,7 +4,7 @@ import Tabs from '../views/Tabs'
 const routes = [
   {
     path: '/',
-    redirect: '/tabs'
+    redirect: '/tabs/home'
   },
   {
     path: '/tabs',
