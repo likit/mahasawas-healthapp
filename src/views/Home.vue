@@ -14,6 +14,10 @@
                 </ion-item>
               </ion-card-content>
             </ion-card>
+            <ion-text>
+              User Group
+              {{ userGroup }}
+            </ion-text>
           </ion-col>
         </ion-row>
         <ion-row>
@@ -207,6 +211,7 @@ export default defineComponent({
         let data = d.data()
         data.id = d.id
         this.$store.dispatch('addGroup', data)
+        this.$store.dispatch('setUserGroup', data)
       })
     },
     async loadActivities(userId) {

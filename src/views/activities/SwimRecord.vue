@@ -5,21 +5,24 @@
         <ion-row>
           <ion-col>
             <ion-text>
-              <h1>Swimming Record</h1>
+              <div class="ion-text-center">
+                <h1>Swim Record</h1>
+                <p>{{ this.user.displayName }}</p>
+              </div>
             </ion-text>
           </ion-col>
         </ion-row>
         <ion-row>
           <ion-col>
             <ion-list>
-              <ion-item detail v-for="record in records" :key="record.id" @click="goToDetail(record.id)">
+              <ion-item detail v-for="record in swimRecords"
+                        :key="record.id" @click="goToDetail(record.id)">
                 <ion-label>
                   {{ record.startDateTime.toDate().toLocaleString() }}
                   <p>
-                    Est. calories {{ ((record.endDateTime - record.startDateTime) / 60) * 5.23 }}
-                  </p>
-                  <p>
-                    Distance {{ record.distance }} meters
+                    Distance {{ record.distance }} m,
+                    {{ record.min }} min
+                   {{ record.estimatedCalories.toFixed(1) }} Cal
                   </p>
                 </ion-label>
               </ion-item>
@@ -28,23 +31,44 @@
         </ion-row>
         <ion-row>
           <ion-col>
-            <ion-button expand="block" href="/activities/swim-record-form">
+            <ion-button expand="block" @click="$router.push({ name: 'SwimRecordForm' })">
               Add
             </ion-button>
           </ion-col>
         </ion-row>
       </ion-grid>
+      <ion-fab vertical="top" horizontal="start" slot="fixed">
+        <ion-fab-button @click="$router.push({ name: 'Exercise' })">
+          <ion-icon :icon="arrowBackCircle"></ion-icon>
+        </ion-fab-button>
+      </ion-fab>
     </ion-content>
   </ion-page>
 </template>
 
 <script>
-import {IonButton, IonCol, IonContent, IonGrid, IonItem, IonLabel, IonList, IonPage, IonRow, IonText} from "@ionic/vue";
-import {collection, getDocs, where, query, orderBy } from "firebase/firestore";
-import {db} from "@/firebase";
+import {
+  IonContent,
+  IonPage,
+  IonGrid,
+  IonRow,
+  IonCol,
+  IonText,
+  IonButton,
+  IonList,
+  IonItem,
+  IonFabButton,
+  IonFab,
+  IonLabel,
+  IonIcon,
+} from '@ionic/vue';
 
-export default {
-  name: "JogRecord",
+import {defineComponent} from 'vue';
+import { arrowBackCircle } from 'ionicons/icons'
+import {mapGetters, mapState} from "vuex";
+
+export default defineComponent({
+  name: "SwimRecord",
   components: {
     IonContent,
     IonPage,
@@ -56,28 +80,25 @@ export default {
     IonList,
     IonItem,
     IonLabel,
+    IonFabButton,
+    IonFab,
+    IonIcon,
   },
-  data () {
+  setup () {
     return {
-      records: []
+      arrowBackCircle,
     }
+  },
+  computed: {
+    ...mapState(['user', 'activity_records']),
+    ...mapGetters(['swimRecords']),
   },
   methods: {
     goToDetail (recordId) {
       this.$router.push({ name: 'SwimRecordDetail', params: { recordId: recordId}})
     }
-  },
-  async mounted () {
-    const ref = collection(db, 'activity_records')
-    const q = query(ref, where("type", "==", "swimming"), orderBy('startDateTime', 'desc'))
-    const querySnapshot = await getDocs(q)
-    querySnapshot.forEach(d=>{
-      let data = d.data()
-      data.id = d.id
-      this.records.push(data)
-    })
   }
-}
+})
 </script>
 
 <style scoped>

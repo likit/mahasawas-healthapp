@@ -35,13 +35,12 @@
                   <ion-progress-bar :value="counts['jogging']/total"></ion-progress-bar>
                 </ion-label>
               </ion-item>
-              <!--
               <ion-item detail router-link="/activities/swim-records">
                 <ion-thumbnail slot="start">
-                  <img src="https://source.unsplash.com/XOcM3n0QkHg">
+                  <img src="https://source.unsplash.com/JjUyjE-oEbM">
                 </ion-thumbnail>
                 <ion-label>
-                  Swimming
+                  Swiming
                   <p>ว่ายน้ำ</p>
                   <ion-progress-bar :value="counts['swimming']/total"></ion-progress-bar>
                 </ion-label>
@@ -56,16 +55,67 @@
                   <ion-progress-bar :value="counts['biking']/total"></ion-progress-bar>
                 </ion-label>
               </ion-item>
-              <ion-item detail>
+              <ion-item detail router-link="/activities/dance-records">
                 <ion-thumbnail slot="start">
-                  <img src="https://source.unsplash.com/BcVvVvqiCGA">
+                  <img src="https://source.unsplash.com/3ckWUnaCxzc">
                 </ion-thumbnail>
                 <ion-label>
                   Dancing
                   <p>เต้นแอโรบิก ลีลาศ ซุมบ้า</p>
-                  <ion-progress-bar value="0"></ion-progress-bar>
+                  <ion-progress-bar :value="counts['dancing']/total"></ion-progress-bar>
                 </ion-label>
               </ion-item>
+              <ion-item detail router-link="/activities/sport-records">
+                <ion-thumbnail slot="start">
+                  <img src="https://source.unsplash.com/dKCKiC0BQtU">
+                </ion-thumbnail>
+                <ion-label>
+                  Sport
+                  <p>กีฬาต่างๆ</p>
+                  <ion-progress-bar :value="counts['sport']/total"></ion-progress-bar>
+                </ion-label>
+              </ion-item>
+              <ion-item detail router-link="/activities/jumprope-records">
+                <ion-thumbnail slot="start">
+                  <img src="https://source.unsplash.com/7QYd1VxLRbM">
+                </ion-thumbnail>
+                <ion-label>
+                  Jump Rope
+                  <p>โดดเชือก</p>
+                  <ion-progress-bar :value="counts['jumprope']/total"></ion-progress-bar>
+                </ion-label>
+              </ion-item>
+              <ion-item detail router-link="/activities/hulahoop-records">
+                <ion-thumbnail slot="start">
+                  <img src="https://source.unsplash.com/HC1I-tgIDq0">
+                </ion-thumbnail>
+                <ion-label>
+                  Hula Hoop
+                  <p>ฮูล่าฮูป</p>
+                  <ion-progress-bar :value="counts['hulahoop']/total"></ion-progress-bar>
+                </ion-label>
+              </ion-item>
+              <ion-item detail router-link="/activities/bodyweight-records">
+                <ion-thumbnail slot="start">
+                  <img src="https://source.unsplash.com/jD4MtXnsJ6w">
+                </ion-thumbnail>
+                <ion-label>
+                  Body Weight
+                  <p>บอร์ดี้เวท</p>
+                  <ion-progress-bar :value="counts['bodyweight']/total"></ion-progress-bar>
+                </ion-label>
+              </ion-item>
+              <ion-item detail router-link="/activities/weighttraining-records">
+                <ion-thumbnail slot="start">
+                  <img src="https://source.unsplash.com/FP7cfYPPUKM">
+                </ion-thumbnail>
+                <ion-label>
+                  Weight Training
+                  <p>เวทเทรนนิ่ง</p>
+                  <ion-progress-bar :value="counts['weightTraining']/total"></ion-progress-bar>
+                </ion-label>
+              </ion-item>
+              <!--
               -->
             </ion-list>
           </ion-col>
@@ -87,7 +137,7 @@ import {
   IonRow,
   IonCol,
   IonProgressBar,
-  IonText,
+  IonText
 } from '@ionic/vue';
 import {defineComponent} from 'vue';
 import {mapGetters, mapState} from "vuex";
@@ -104,7 +154,7 @@ export default defineComponent({
     IonPage,
     IonList,
     IonItem,
-    IonLabel,
+    IonLabel
   },
   data () {
     return {
@@ -112,7 +162,13 @@ export default defineComponent({
         walking: 0,
         jogging: 0,
         swimming: 0,
-        biking: 0
+        biking: 0,
+        dancing: 0,
+        sport: 0,
+        jumprope: 0,
+        hulahoop: 0,
+        bodyweight: 0,
+        weightTraining: 0
       },
       total: 0
     }
@@ -123,13 +179,24 @@ export default defineComponent({
   },
   methods: {
     loadActivities () {
+      this.total = 0
+      this.counts.walking = 0
+      this.counts.jogging = 0
+      this.counts.swimming = 0
+      this.counts.biking = 0,
+      this.counts.dancing = 0,
+      this.counts.sport = 0,
+      this.counts.jumprope = 0,
+      this.counts.hulahoop = 0,
+      this.counts.bodyweight = 0,
+      this.counts.weightTraining = 0
       this.activity_records.forEach(d=>{
         this.total++
         this.counts[d.type]++
       })
     }
   },
-  mounted () {
+  updated() {
     this.loadActivities()
   }
 });

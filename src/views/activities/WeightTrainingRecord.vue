@@ -6,7 +6,8 @@
           <ion-col>
             <ion-text>
               <div class="ion-text-center">
-                <h1>Jog Record</h1>
+                <h4>Weight Training Record</h4>
+                <p>{{ this.user.displayName }}</p>
               </div>
             </ion-text>
           </ion-col>
@@ -14,11 +15,14 @@
         <ion-row>
           <ion-col>
             <ion-list>
-              <ion-item detail v-for="record in JogRecords.slice(0, 7)" :key="record.id" @click="goToDetail(record.id)">
+              <ion-item detail v-for="record in WeightTrainingRecords.slice(0,7)"
+                        :key="record.id" @click="goToDetail(record.id)">
                 <ion-label>
                   {{ record.startDateTime.toDate().toLocaleString() }}
                   <p>
-                    {{ record.distance }} km,
+                    {{ record.muscle }},
+                    {{ record.reps }} reps,
+                    {{ record.countset }} set,
                     {{ record.min }} min,
                     {{ record.estimatedCalories.toFixed(1) }} Cal
                   </p>
@@ -29,7 +33,7 @@
         </ion-row>
         <ion-row>
           <ion-col>
-            <ion-button expand="block" @click="$router.push({name: 'JogRecordForm'})">
+            <ion-button expand="block" @click="$router.push({ name: 'WeightTrainingRecordForm' })">
               Add
             </ion-button>
           </ion-col>
@@ -46,25 +50,27 @@
 
 <script>
 import {
-  IonButton,
-  IonCol,
   IonContent,
-  IonGrid,
-  IonItem,
-  IonLabel,
-  IonList,
   IonPage,
+  IonGrid,
   IonRow,
+  IonCol,
   IonText,
-  IonFab,
+  IonButton,
+  IonList,
+  IonItem,
   IonFabButton,
-  IonIcon
-} from "@ionic/vue";
-import { arrowBackCircle } from 'ionicons/icons'
-import {mapGetters} from "vuex";
+  IonFab,
+  IonLabel,
+  IonIcon,
+} from '@ionic/vue';
 
-export default {
-  name: "JogRecord",
+import {defineComponent} from 'vue';
+import { arrowBackCircle } from 'ionicons/icons'
+import {mapGetters, mapState} from "vuex";
+
+export default defineComponent({
+  name: "WeightTrainingRecord",
   components: {
     IonContent,
     IonPage,
@@ -76,24 +82,25 @@ export default {
     IonList,
     IonItem,
     IonLabel,
-    IonFab,
     IonFabButton,
-    IonIcon
+    IonFab,
+    IonIcon,
   },
   setup () {
     return {
-      arrowBackCircle
+      arrowBackCircle,
     }
   },
   computed: {
-    ...mapGetters(['JogRecords'])
+    ...mapState(['user', 'activity_records']),
+    ...mapGetters(['WeightTrainingRecords']),
   },
   methods: {
     goToDetail (recordId) {
-      this.$router.push({ name: 'JogRecordDetail', params: { recordId: recordId}})
+      this.$router.push({ name: 'WeightTrainingRecordDetail', params: { recordId: recordId}})
     }
   }
-}
+})
 </script>
 
 <style scoped>

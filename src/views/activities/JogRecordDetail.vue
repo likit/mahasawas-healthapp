@@ -6,7 +6,7 @@
           <ion-col>
             <ion-text>
               <div class="ion-text-center">
-                <h1>Jog Record Detail</h1>
+                <h3>Jog Record Detail</h3>
               </div>
             </ion-text>
           </ion-col>
@@ -148,6 +148,8 @@ export default defineComponent({
         distances: 0,
         estimatedCalories: 0,
         calories: 0,
+        steps: 0,
+        min: 0,
       },
       challenges: [],
       submissions: [],
@@ -164,7 +166,7 @@ export default defineComponent({
     submissableChallenges () {
       return this.challenges.filter(ch => this.submissions.indexOf(ch.id) < 0)
     },
-    ...mapState(['user', 'profile'])
+    ...mapState(['user', 'profile','userGroup'])
   },
   watch: {
     'route.params.recordId': async function() {
@@ -221,7 +223,15 @@ export default defineComponent({
           recordId: this.route.params.recordId,
           userId: this.user.userId,
           challengeId: ch,
-          submittedAt: new Date()
+          submittedAt: new Date(),
+          type: this.record.type,
+          steps: this.record.steps,
+          calories: this.record.calories,
+          estimatedCalories: this.record.estimatedCalories,
+          min: this.record.min,
+          exerType: this.record.exerType,
+          userGroupId: this.userGroup.id,
+          distance: this.record.distance,
         }).then(async () => {
           await this.presentSubmit()
           this.submissions.push(ch)

@@ -25,9 +25,13 @@
                 <ion-label position="floating">Start</ion-label>
                 <ion-datetime display-format="MMM DD, YYYY HH:mm" v-model="startDateTime"></ion-datetime>
               </ion-item>
+              <ion-item class="ion-margin-bottom">
+                <ion-label position="floating">Time (min)</ion-label>
+                <ion-input type="number" min="0" step="100" v-model="min" placeholder="เวลาหน่วยเป็นนาที"></ion-input>
+              </ion-item>
               <ion-item>
-                <ion-label position="floating">End</ion-label>
-                <ion-datetime display-format="MMM DD, YYYY HH:mm" v-model="endDateTime"></ion-datetime>
+                <ion-label position="floating">Steps</ion-label>
+                <ion-input type="number" min="1" step="1" v-model="steps" placeholder="จำนวนก้าวโดยประมาณ"></ion-input>
               </ion-item>
               <ion-item>
                 <ion-label position="floating">Distance (km)</ion-label>
@@ -119,7 +123,7 @@ export default defineComponent({
   data () {
     return {
       startDateTime: new Date().toISOString(),
-      endDateTime: new Date().toISOString(),
+      min: 0,
       distance: 0,
       steps: 0,
       calories: 0,
@@ -130,14 +134,14 @@ export default defineComponent({
     ...mapGetters(['userId']),
     isFormValid () {
       return (this.startDateTime != '' || this.startDateTime != null)
-          && (this.endDateTime != '' || this.endDateTime != null)
+          && (this.min != 0)
           && (this.estimatedCal > 0)
     },
     estimatedCal () {
-      let end = new Date(this.endDateTime)
-      let start = new Date(this.startDateTime)
-      let delta = end - start
-      return (delta / 60000) * 5.23 * this.intensity
+      let Cainten = 1
+      if( this.intensity == 2){Cainten = 1.5}
+      if( this.intensity == 2){Cainten = 2}
+      return (this.min * 495) / 30 * Cainten
     }
   },
   methods: {
@@ -161,13 +165,14 @@ export default defineComponent({
         let data = {
           userId: this.userId,
           startDateTime: Timestamp.fromDate(new Date(this.startDateTime)),
-          endDateTime: Timestamp.fromDate(new Date(this.endDateTime)),
+          min: this.min,
           distance: this.distance,
           steps: this.steps,
           calories: this.calories,
           estimatedCalories: this.estimatedCal,
           createdAt: Timestamp.fromDate(new Date()),
-          type: 'jogging'
+          type: 'jogging',
+          exerType: 'Cardio'
         }
         addDoc(ref, data).then((docRef)=>{
           data.id = docRef.id

@@ -5,7 +5,7 @@
         <ion-row>
           <ion-col>
             <ion-text>
-              <h1>Swim Record</h1>
+              <h1>Jump Rope Record</h1>
             </ion-text>
           </ion-col>
         </ion-row>
@@ -28,8 +28,8 @@
                 <ion-input type="number" min="0" step="100" v-model="min" placeholder="เวลาหน่วยเป็นนาที"></ion-input>
               </ion-item>
               <ion-item>
-                <ion-label position="floating">Distance (m)</ion-label>
-                <ion-input type="number" min="0.1" step="0.1" v-model="distance" placeholder="ระยะทางหน่วยเมตร"></ion-input>
+                <ion-label position="floating">Counter</ion-label>
+                <ion-input type="number" min="0" step="100" v-model="jumpCounter" placeholder="จำนวนครั้งที่โดด"></ion-input>
               </ion-item>
               <ion-item>
                 <ion-label position="floating">Calculated calories</ion-label>
@@ -90,7 +90,7 @@ import { db } from '../../firebase'
 import { collection, addDoc, Timestamp } from '@firebase/firestore'
 
 export default defineComponent({
-  name: "SwimRecordForm",
+  name: "JumpRopeRecordForm",
   components: {
     IonIcon,
     IonContent,
@@ -117,7 +117,7 @@ export default defineComponent({
     return {
       startDateTime: new Date().toISOString(),
       min: 0,
-      distance: 0,
+      jumpCounter: 0,
       calories: 0,
       intensity: 1,
     }
@@ -132,7 +132,7 @@ export default defineComponent({
       let Cainten = 1
       if( this.intensity == 2){Cainten = 1.5}
       if( this.intensity == 2){Cainten = 2}
-      return (this.min * 180) / 30 * Cainten
+      return (this.min * 300) / 30 * Cainten
     },
   },
   methods: {
@@ -157,20 +157,24 @@ export default defineComponent({
           userId: this.$store.state.user.userId,
           startDateTime: Timestamp.fromDate(new Date(this.startDateTime)),
           min: this.min,
-          distance: this.distance,
+          jumpCounter: this.jumpCounter,
           calories: this.calories,
           estimatedCalories: this.estimatedCal,
           createdAt: Timestamp.fromDate(new Date()),
-          type: 'swimming',
+          type: 'jumprope',
           exerType: 'Cardio'
         }
         addDoc(ref, data).then((docRef)=>{
           data.id = docRef.id
           this.$store.dispatch('addActivity',  data)
-          this.$router.push({ name: 'SwimRecord' })
+          this.$router.push({ name: 'JumpRopeRecord' })
         })
       }
     }
+  },
+  mounted() {
+    console.log(this.$store.state.user)
+    console.log(this.$store.state.activity_records.length)
   }
 })
 </script>
