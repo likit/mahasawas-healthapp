@@ -9,7 +9,7 @@
                 <ion-item lines="none">
                   <ion-icon slot="start" class="badge" size="large" :icon="ribbonOutline"></ion-icon>
                   <ion-text color="primary">
-                    The user is: {{ profile.firstname }} {{ profile.lastname }}
+                    Welcome {{ profile.firstNameTh || profile.firstNameEn }}
                   </ion-text>
                 </ion-item>
               </ion-card-content>
@@ -86,10 +86,9 @@ import {
 } from '@ionic/vue';
 import {defineComponent} from 'vue';
 import { ribbonOutline } from 'ionicons/icons';
-import { collection, getDocs, query, where, orderBy, doc, updateDoc, addDoc } from "firebase/firestore";
+import {collection, getDocs, query, where, orderBy, doc, updateDoc, addDoc, getDoc} from "firebase/firestore";
 import {db} from "@/firebase";
 import { mapState} from "vuex";
-import axios from "axios";
 
 export default defineComponent({
   name: 'Home',
@@ -130,13 +129,14 @@ export default defineComponent({
   },
   data () {
     return {
-      authToken: null
+      authToken: null,
+      urlQuery: null,
     }
   },
   mounted () {
-    this.authToken = this.$route.query.token
-    if (this.authToken !== null && this.authToken !== undefined) {
-      this.loadProfile()
+    let urlQuery = this.$route.query
+    if (Object.keys(urlQuery).length !== 0) {
+      this.setUpUser(urlQuery)
     } else {
       // this.$router.push({ name: 'Prohibition' })
       this.setUpUser({
@@ -145,7 +145,13 @@ export default defineComponent({
         firstNameTh: 'ลิขิต',
         lastNameTh: 'ปรียานนท์',
         titleNameTh: 'ดร.',
+        titleNameEn: 'Dr.',
+        firstNameEn: 'Likit',
+        lastNameEn: 'Preeyanon',
+        userLogin: 'likit.pre@mahidol.ac.th',
+        emails: 'likit.pre@mahidol.ac.th',
         facultyNameTh: 'คณะเทคนิคการแพทย์',
+        facultyNameEn: 'FACULTY OF MEDICAL TECHNOLOGY',
         groupType: 'staff',
       })
     }
@@ -163,49 +169,22 @@ export default defineComponent({
         await addDoc(ref, userData)
       }
       this.$store.commit('SET_USER', userData)
-      let profileData = {
-        firstNameTh: data.firstNameTh,
-        lastNameTh: data.lastNameTh,
-        titleNameTh: data.titleNameTh,
-        facultyNameTh: data.facultyNameTh,
-        groupType: data.groupType,
-        phone: '',
-        challenges: [],
-        userId: data.userId
-      }
-      this.$store.commit('SET_PROFILE', {
-        firstname: data.firstNameTh,
-        lastname: data.lastNameTh,
-        title: data.titleNameTh,
-        phone: null,
-        userId: data.userId,
-        updateDateTime: null,
-        challanges: [],
-      })
       let profileRef = collection(db, 'profiles')
       q = query(profileRef, where('userId', '==', data.userId))
       querySnapshot = await getDocs(q)
       if (querySnapshot.empty) {
-        await addDoc(profileRef, profileData)
+        data['challenges'] = []
+        await addDoc(profileRef, data)
+        this.$store.dispatch('updateProfile', data)
       } else {
+        alert('Updating profiles ' + querySnapshot.docs.length)
         for (let d of querySnapshot.docs) {
           let docRef = doc(db, 'profiles', d.id)
-          console.log('Updating the user profile...')
-          await updateDoc(docRef, profileData)
+          await updateDoc(docRef, data)
+          let docSnapshot = await getDoc(docRef)
+          this.$store.dispatch('updateProfile', docSnapshot.data())
         }
       }
-    },
-    async loadProfile() {
-      await axios.post('https://dcu-sitauth.mahidol.ac.th/auth/v1/sso/profile',
-          {
-            "token": this.authToken,
-            "clientId": "8fd61a82-ba20-4278-82b0-5b175b489189",
-            "clientSecret": "x67IirZdDTCHp1pLor6mAdVT107qZ0Yv1mi8O6VB"
-          }).then(async res => {
-            this.setUpUser(res)
-      }).catch(e => {
-        alert(e.toString())
-      })
     },
     async addChallenge(challengeId) {
       if (this.profile.challenges.indexOf(challengeId) < 0) {

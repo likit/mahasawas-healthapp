@@ -8,15 +8,7 @@ const store = createStore({
             pictureUrl: null,
             statusMessage: null,
         },
-        profile: {
-            title: null,
-            firstname: null,
-            lastname: null,
-            challenges: [],
-            phone: null,
-            updateDateTime: null,
-            userId: null
-        },
+        profile: {},
         activity_records: [],
         groups: [],
         challenges: [],
