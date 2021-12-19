@@ -9,7 +9,7 @@
                 <ion-item lines="none">
                   <ion-icon slot="start" class="badge" size="large" :icon="ribbonOutline"></ion-icon>
                   <ion-text color="primary">
-                    Welcome {{ profile.firstNameTh || profile.firstNameEn }}
+                    Welcome {{ profile.titleNameTh || profile.titleNameEn }}{{ profile.firstNameTh || profile.firstNameEn }}
                   </ion-text>
                 </ion-item>
               </ion-card-content>
@@ -45,7 +45,7 @@
             <ion-card>
               <img src="https://source.unsplash.com/J154nEkpzlQ">
               <ion-card-header>
-                <ion-card-title>{{ ch.title }} Challenges</ion-card-title>
+                <ion-card-title>{{ ch.title }}</ion-card-title>
               </ion-card-header>
               <ion-card-content>
                 {{ ch.pitch }}
@@ -177,7 +177,6 @@ export default defineComponent({
         await addDoc(profileRef, data)
         this.$store.dispatch('updateProfile', data)
       } else {
-        alert('Updating profiles ' + querySnapshot.docs.length)
         for (let d of querySnapshot.docs) {
           let docRef = doc(db, 'profiles', d.id)
           await updateDoc(docRef, data)
