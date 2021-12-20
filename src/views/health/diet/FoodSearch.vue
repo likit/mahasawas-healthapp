@@ -136,6 +136,11 @@
           </ion-label>
         </ion-item>
       </ion-list>
+      <ion-fab vertical="top" horizontal="start" slot="fixed">
+        <ion-fab-button @click="$router.push({ name: 'Health' })">
+          <ion-icon :icon="arrowBackCircle"></ion-icon>
+        </ion-fab-button>
+      </ion-fab>
     </ion-content>
   </ion-page>
 </template>
@@ -156,7 +161,12 @@ import {
   IonDatetime,
   IonInput,
   IonProgressBar,
+  IonLabel,
+  IonFab,
+  IonFabButton,
+  IonIcon
 } from '@ionic/vue';
+import { arrowBackCircle } from 'ionicons/icons'
 import {db} from "@/firebase";
 import { collection, addDoc,Timestamp,getDocs, query, where } from '@firebase/firestore'
 import {ref} from 'vue';
@@ -177,7 +187,11 @@ export default {
     IonRange,
     IonDatetime,
     IonInput,
-    IonProgressBar
+    IonProgressBar,
+    IonLabel,
+    IonFab,
+    IonFabButton,
+    IonIcon,
   },
   data(){
     return{
@@ -301,12 +315,14 @@ export default {
     },
   },
   setup(){
+
     const keywords = ref("");
     const change  = () => {
     }
     return {
       keywords,
       change,
+      arrowBackCircle
     };
   },
   updated() {

@@ -9,15 +9,6 @@
                 <h1>Profile</h1>
               </div>
             </ion-text>
-            <ion-item inset="true">
-              <ion-avatar slot="start">
-                <img :src="user.pictureUrl">
-              </ion-avatar>
-              <ion-label>
-                <h2>{{ user.displayName }}</h2>
-                <p>{{ user.statusMessage }}</p>
-              </ion-label>
-            </ion-item>
           </ion-col>
         </ion-row>
         <ion-row>
@@ -51,7 +42,7 @@
                     Information
                   </ion-label>
                 </ion-item-divider>
-                <ion-item detail inset="true" @click="$router.push({ name: 'Home'})">
+                <ion-item detail inset="true">
                   <ion-icon slot="start" :icon="alertCircleOutline"></ion-icon>
                   <ion-label>Term & Condition</ion-label>
                 </ion-item>
@@ -74,7 +65,6 @@ import {
 import {
   IonItemDivider,
   IonItemGroup,
-  IonAvatar,
   IonContent,
   IonPage,
   IonList,
@@ -99,7 +89,6 @@ export default defineComponent({
     IonIcon,
     IonItemDivider,
     IonItemGroup,
-    IonAvatar,
     IonContent,
     IonPage,
     IonList,
