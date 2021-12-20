@@ -7,133 +7,155 @@
             <ion-text>
               <div class="ion-text-center">
                 <h1>Food</h1>
-                <p>ค้นหารายการอาหาร</p>
+                <p>สัดส่วนการทานอาหาร</p>
               </div>
             </ion-text>
           </ion-col>
         </ion-row>
         <ion-row>
           <ion-col>
-            <ion-item>
-              <ion-label position="floating">Date</ion-label>
-              <ion-datetime display-format="MMM DD, YYYY HH:mm" v-model="FoodDateTime"></ion-datetime>
-            </ion-item>
-          </ion-col>
-        </ion-row>
-        <ion-row>
-          <ion-col>
-            <ion-label>
-              <h3>Day Nutrients</h3>
-              <p>Carb</p>
-              <ion-progress-bar :value="FoodBarCarb"></ion-progress-bar>
-            </ion-label>
-            <ion-label>
+              <h3>Daily Ratio</h3>
+              <p>Carbohydrate</p>
+              <ion-progress-bar :value="foodBarCarb"></ion-progress-bar>
               <p>Protein</p>
-              <ion-progress-bar :value="FoodBarProtein"></ion-progress-bar>
-            </ion-label>
-            <ion-label>
+              <ion-progress-bar :value="foodBarProtein"></ion-progress-bar>
               <p>Vegetable</p>
-              <ion-progress-bar :value="FoodBarVegetable"></ion-progress-bar>
-            </ion-label>
-            <ion-lab>
-              <p>Cal {{ this.counts.FoodCal }}</p>
-            </ion-lab>
+              <ion-progress-bar :value="foodBarVegetable"></ion-progress-bar>
+              <p>Total {{ counts.foodCal }} kCal</p>
           </ion-col>
         </ion-row>
         <ion-row>
           <ion-col>
-            <ion-searchbar placeholder="enter key" inputmode="search" animated debounce="100" v-model="keywords" @ionChange="change">
-            </ion-searchbar>
+            <h4>สัดส่วนมื้ออาหาร</h4>
           </ion-col>
         </ion-row>
         <ion-row>
-          <ion-list>
-            <ion-item v-for="FoodRec in FoodData" :key="FoodRec.id">
-              <label>ชื่ออาหาร {{ keywords }}
-              </label>
+          <ion-col>
+            <ion-list>
+              <ion-item>
+                <ion-label position="floating">ชื่อเมนูอาหาร</ion-label>
+                <ion-input placeholder="dish name" v-model="dishName"></ion-input>
+              </ion-item>
+              <ion-item>
+                <ion-label position="floating">วันที่ / Date</ion-label>
+                <ion-datetime display-format="MMM DD, YYYY HH:mm"
+                              v-model="foodDateTime">
+                </ion-datetime>
+              </ion-item>
+            </ion-list>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col>
+            <ion-list>
+              <ion-item v-for="FoodRec in foodData" :key="FoodRec.id">
+                <label>ชื่ออาหาร {{ dishName }}
+                </label>
+              </ion-item>
+            </ion-list>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col size="8">
+            <ion-label>Carb เช่น ข้าว/แป้ง/น้ำตาล</ion-label>
+          </ion-col>
+          <ion-col>
+            <ion-label>{{ foodCarb }} ส่วน</ion-label>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col>
+            <ion-range  min="0" max="5"
+                        :value="foodCarb"
+                        @ionChange="changeCarbRatio($event.target.value)"
+                        step="1" ticks="true" snaps="true" color="warning">
+            </ion-range>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col size="8">
+            <ion-label>Protein เช่น เนื้อสัตว์/ถั่ว/เห็ด</ion-label>
+          </ion-col>
+          <ion-col>
+            <ion-label>{{ foodProtein }} ส่วน</ion-label>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col>
+            <ion-range  min="0" max="5"
+                        :value="foodProtein"
+                        @ionChange="changeProteinRatio($event.target.value)"
+                        step="1" ticks="true"
+                        snaps="true" color="secondary">
+            </ion-range>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col size="8">
+            <ion-label>Vegetable เช่น ผักสีต่าง ๆ</ion-label>
+          </ion-col>
+          <ion-col>
+            <ion-label>{{ foodVegetable }} ส่วน</ion-label>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col>
+            <ion-range  min="0" max="5"
+                        :pin="true"
+                        :value="foodVegetable"
+                        @ionChange="changeVegetableRatio($event.target.value)"
+                        step="1" ticks="true"
+                        snaps="true" color="success">
+            </ion-range>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col>
+            <ion-item>
+              <ion-label position="floating">Energy (kCal)</ion-label>
+              <ion-input type="number" placeholder="100" v-model="foodCal"></ion-input>
             </ion-item>
-          </ion-list>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col>
+            <ion-item>
+              <ion-label position="floating">Quantity (ฝ่ามือ)</ion-label>
+              <ion-input type="number" placeholder="1" v-model="foodQuantity"></ion-input>
+            </ion-item>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col>
+            <ion-button :disabled="!isFormValid"
+                        expand="block" color="success"
+                        @click="saveData">เพิ่มรายการ
+            </ion-button>
+          </ion-col>
         </ion-row>
       </ion-grid>
-      <ion-grid>
-        <ion-row>
-          <ion-col size="8">
-            <ion-label>Carb:(ข้าว/แป้ง/เส้น)</ion-label>
-          </ion-col>
-          <ion-col>
-            <ion-label>{{ FoodCarb }} %</ion-label>
-          </ion-col>
-        </ion-row>
-        <ion-row>
-          <ion-range  min="0" max="100" v-model="FoodCarb" step="5" ticks="true" snaps="true" color="warning"></ion-range>
-        </ion-row>
-        <ion-row>
-          <ion-col size="8">
-            <ion-label>Protein:(เนื้อสัตว์/ถั่ว/เห็ด)</ion-label>
-          </ion-col>
-          <ion-col>
-            <ion-label>{{ FoodProtein }} %</ion-label>
-          </ion-col>
-        </ion-row>
-        <ion-row>
-          <ion-range  min="0" max="100" v-model="FoodProtein" step="5" ticks="true" snaps="true" color="secondary"></ion-range>
-        </ion-row>
-        <ion-row>
-          <ion-col size="8">
-            <ion-label>Vegetable:(ผัก)</ion-label>
-          </ion-col>
-          <ion-col>
-            <ion-label>{{ FoodVegetable }} %</ion-label>
-          </ion-col>
-        </ion-row>
-        <ion-row>
-          <ion-range  min="0" max="100" v-model="FoodVegetable" step="5" ticks="true" snaps="true" color="success"></ion-range>
-        </ion-row>
-        <ion-row>
-          <ion-col>
-            <div class="ion-text-center">
-              <ion-label>{{ FoodNutrientsPercent = FoodCarb +  FoodProtein + FoodVegetable }}</ion-label>
-            </div>
-          </ion-col>
-        </ion-row>
-        <ion-row>
-          <ion-item>
-            <ion-label slot="start">Calorie</ion-label>
-            <ion-input type="number" placeholder="100" v-model="FoodCal"></ion-input>
-            <ion-label slot="end">Cal</ion-label>
-          </ion-item>
-        </ion-row>
-        <ion-row>
-          <ion-item>
-            <ion-label slot="start">Quantity</ion-label>
-            <ion-input type="number" placeholder="1" v-model="FoodQuantity"></ion-input>
-            <ion-label slot="end">ฝ่ามือ</ion-label>
-          </ion-item>
-        </ion-row>
-      </ion-grid>
-      <ion-button :disabled="!isFormValid" expand="block" color="success" @click="SaveData">เพิ่มรายการ</ion-button>
       <ion-list>
-        <ion-item v-for="FoodPerDayRecord in FoodPerDay" :key="FoodPerDayRecord.id">
+        <ion-item v-for="foodPerDayRecord in foodPerDay.slice(0,3)" :key="foodPerDayRecord.id">
           <ion-label>
             <p>
-              {{ FoodPerDayRecord.createdAt.toDate().toLocaleString() }}
+              {{ foodPerDayRecord.createdAt.toDate().toLocaleString() }}
             </p>
             <h3>
-              {{ FoodPerDayRecord.FoodName}}
-              {{ FoodPerDayRecord.FoodCal}} Cal
-              {{ FoodPerDayRecord.FoodQuantity }} ฝ่ามือ
+              {{ foodPerDayRecord.foodName}}
+              {{ foodPerDayRecord.foodCal}} kCal
+              {{ foodPerDayRecord.foodQuantity }} ฝ่ามือ
             </h3>
           </ion-label>
         </ion-item>
         <ion-item>
-          <ion-label>
+          <ion-text>
             <p>
               เนื้อสัตว์ 1 ฝ่ามือ ประมาณ 85-100 กรัม
             </p>
             <p>
               ข้าว 1 ฝ่ามือ/ถ้วย ประมาณ 80 กรัม
             </p>
-          </ion-label>
+          </ion-text>
         </ion-item>
       </ion-list>
       <ion-fab vertical="top" horizontal="start" slot="fixed">
@@ -153,7 +175,6 @@ import {
   IonRow,
   IonCol,
   IonText,
-  IonSearchbar,
   IonList,
   IonItem,
   IonButton,
@@ -168,9 +189,9 @@ import {
 } from '@ionic/vue';
 import { arrowBackCircle } from 'ionicons/icons'
 import {db} from "@/firebase";
-import { collection, addDoc,Timestamp,getDocs, query, where } from '@firebase/firestore'
-import {ref} from 'vue';
+import { collection, addDoc, Timestamp, getDocs, query, where } from '@firebase/firestore'
 import {orderBy} from "firebase/firestore";
+import {mapGetters} from "vuex";
 export default {
   name: "FoodSearch",
   components: {
@@ -180,7 +201,6 @@ export default {
     IonRow,
     IonCol,
     IonText,
-    IonSearchbar,
     IonList,
     IonItem,
     IonButton,
@@ -195,81 +215,77 @@ export default {
   },
   data(){
     return{
-      FoodData: [],
-      FoodPerDay:[],
-      FoodDateTime: new Date().toISOString(),
-      FoodCarb: 0,
-      FoodProtein: 0,
-      FoodVegetable: 0,
-      FoodNutrientsPercent: 0,
-      FoodQuantity: 0,
-      FoodCal: 0,
-      DateN: '',
+      foodData: [],
+      foodPerDay:[],
+      dishName: null,
+      foodDateTime: new Date().toISOString(),
+      foodCarb: 0,
+      foodProtein: 0,
+      foodVegetable: 0,
+      foodQuantity: 0,
+      foodCal: 0,
       counts:{
-        FoodCarb: 0,
-        FoodProtein: 0,
-        FoodVegetable: 0,
-        FoodCal: 0
+        foodCarb: 0,
+        foodProtein: 0,
+        foodVegetable: 0,
+        foodCal: 0
       },
-      FoodBarCarb: 0,
-      FoodBarProtein: 0,
-      FoodBarVegetable: 0,
-      ToTalNutrients: 0
+      foodBarCarb: 0,
+      foodBarProtein: 0,
+      foodBarVegetable: 0,
+      totalNutrients: 0
     }
   },
   computed:{
     isFormValid () {
-      return (this.FoodNutrientsPercent === 100 && this.keywords !== '')
-      && (this.FoodQuantity != '' || this.FoodQuantity != 0)
-    }
+      return 0 < this.foodRatio <= 5 && this.dishName !== ''
+    },
+    foodRatio () {
+      return this.foodProtein + this.foodCarb + this.foodVegetable
+    },
+    dateN () {
+      let strDateY = new Date().getFullYear()
+      let strDateM = new Date().getMonth() + 1
+      let strDateD = new Date().getDate()
+      return strDateY.toString() + strDateM.toString() + strDateD.toString()
+    },
+    ...mapGetters(['userId'])
   },
   watch:{
-    keywords: async function () {
-      await this.LoadFoodData()
+    foodDateTime: async  function(){
+      await this.loadFoodPerDay()
     },
-    FoodDateTime: async  function(){
-      await this.LoadFoodPereDay()
-    }
   },
   methods:{
-    async LoadFoodData(){
-      let ref = collection(db, 'Food')
-      let q = query(ref, where("FoodName", "==", this.keywords))
-      let querySnapshot = await getDocs(q)
-      if (querySnapshot.empty){
-        this.FoodData = [{ FoodName: this.keywords }]
-        this.FoodCarb = 0
-        this.FoodProtein = 0
-        this.FoodVegetable = 0
-        this.FoodCal = 0
-      }else{
-        querySnapshot.forEach(d => {
-          let data = d.data()
-          data.id = d.id
-          this.FoodData = []
-          this.FoodData.push(data)
-          this.FoodCarb = data.FoodCarb
-          this.FoodProtein = data.FoodProtein
-          this.FoodVegetable = data.FoodVegetable
-          this.FoodCal = data.FoodCal
-          this.FoodQuantity = data.FoodQuantity
-        })
+    changeProteinRatio (value) {
+      if (value + this.foodCarb + this.foodVegetable <= 5) {
+        this.foodProtein = value
       }
     },
-    async SaveData(){
-      let data ={
-        userId: this.$store.state.user.userId,
-        FoodName : this.keywords,
-        FoodCarb : this.FoodCarb,
-        FoodProtein : this.FoodProtein,
-        FoodVegetable : this.FoodVegetable,
-        FoodCal: this.FoodCal,
-        FoodQuantity: this.FoodQuantity,
-        createdAt: Timestamp.fromDate(new Date()),
-        datetxt: this.DateN
+    changeCarbRatio (value) {
+      if (value + this.foodProtein + this.foodVegetable <= 5) {
+        this.foodCarb = value
       }
-      let ref = collection(db, 'Food')
-      let q = query(ref, where("FoodName", "==", this.keywords))
+    },
+    changeVegetableRatio (value) {
+      if (value + this.foodProtein + this.foodCarb <= 5) {
+        this.foodVegetable = value
+      }
+    },
+    async saveData(){
+      let data ={
+        userId: this.userId,
+        foodName : this.dishName,
+        foodCarb : this.foodCarb,
+        foodProtein : this.foodProtein,
+        foodVegetable : this.foodVegetable,
+        foodCal: this.foodCal,
+        foodQuantity: this.foodQuantity,
+        createdAt: Timestamp.fromDate(new Date()),
+        dateCode: this.dateN
+      }
+      let ref = collection(db, 'food')
+      let q = query(ref, where("FoodName", "==", this.dishName))
       let querySnapshot = await getDocs(q)
       if (querySnapshot.empty){
         addDoc(ref, data).then((docRef)=>{
@@ -277,60 +293,52 @@ export default {
         })
       }
       if (this.isFormValid) {
-        let ref = collection(db, 'FoodUser')
+        let ref = collection(db, 'food_records')
         addDoc(ref, data).then((docRef)=>{
           data.id = docRef.id
         })
       }
-      await  this.LoadFoodPereDay()
+      await this.loadFoodPerDay()
     },
-    async LoadFoodPereDay(){
-      let ref = collection(db, 'FoodUser')
-      let q = query(ref, where("userId", "==", this.$store.state.user.userId), where('datetxt', '==',this.DateN ),
+    async loadFoodPerDay(){
+      let ref = collection(db, 'food_records')
+      let q = query(ref, where("userId", "==", this.userId),
+          where('dateCode', '==', this.dateN),
           orderBy('createdAt','desc'))
       let querySnapshot = await getDocs(q)
-      this.counts.FoodCal = 0
-      this.counts.FoodCarb += 0
-      this.counts.FoodProtein += 0
-      this.counts.FoodVegetable += 0
-      this.ToTalNutrients += 0
-      this.FoodPerDay = []
+      this.dishName = null
+      this.counts.foodCal = 0
+      this.counts.foodCarb = 0
+      this.counts.foodProtein = 0
+      this.counts.foodVegetable = 0
+      this.totalNutrients = 0
+      this.foodPerDay = []
       querySnapshot.forEach(d => {
         let data = d.data()
         data.id = d.id
-        this.FoodPerDay.push(data)
-        this.counts.FoodCal += parseInt(data.FoodCal) * (data.FoodQuantity)
-        this.counts.FoodCarb += parseInt(data.FoodCarb)* (data.FoodQuantity)
-        console.log(data.FoodCarb)
-        this.counts.FoodProtein += parseInt(data.FoodProtein)* (data.FoodQuantity)
-        this.counts.FoodVegetable += parseInt(data.FoodVegetable)* (data.FoodQuantity)
-        this.ToTalNutrients += parseInt(data.FoodCarb)* (data.FoodQuantity)
-        this.ToTalNutrients += parseInt(data.FoodProtein)* (data.FoodQuantity)
-        this.ToTalNutrients += parseInt(data.FoodVegetable)* (data.FoodQuantity)
+        this.foodPerDay.push(data)
+        this.counts.foodCal += parseInt(data.foodCal) * parseInt(data.foodQuantity)
+        this.counts.foodCarb += parseInt(data.foodCarb)
+        this.counts.foodProtein += parseInt(data.foodProtein)
+        this.counts.foodVegetable += parseInt(data.foodVegetable)
+        this.totalNutrients += this.counts.foodCarb
+        this.totalNutrients += this.counts.foodProtein
+        this.totalNutrients += this.counts.foodVegetable
       })
-      if(this.counts.FoodCarb != 0){this.FoodBarCarb = this.counts.FoodCarb / this.ToTalNutrients}
-      if(this.counts.FoodProtein != 0){this.FoodBarProtein = this.counts.FoodProtein / this.ToTalNutrients}
-      if(this.counts.FoodVegetable != 0){this.FoodBarVegetable = this.counts.FoodVegetable / this.ToTalNutrients}
-
+      if (this.totalNutrients > 0) {
+        this.foodBarCarb = (this.counts.foodCarb / this.totalNutrients)
+        this.foodBarProtein = (this.counts.foodProtein / this.totalNutrients)
+        this.foodBarVegetable = (this.counts.foodVegetable / this.totalNutrients)
+      }
     },
   },
   setup(){
-
-    const keywords = ref("");
-    const change  = () => {
-    }
     return {
-      keywords,
-      change,
       arrowBackCircle
     };
   },
-  updated() {
-    let strDateY = new Date().getFullYear()
-    let strDateM = new Date().getMonth()
-    let strDateD = new Date().getDate()
-    this.DateN = strDateY.toString() + strDateM.toString() + strDateD.toString()
-    this.LoadFoodPereDay()
+  mounted () {
+    this.loadFoodPerDay()
   }
 }
 </script>
