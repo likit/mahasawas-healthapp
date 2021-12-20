@@ -7,26 +7,27 @@
             <ion-text>
               <div class="ion-text-center">
                 <h1>Food</h1>
-                <p>สัดส่วนการทานอาหาร</p>
               </div>
             </ion-text>
           </ion-col>
         </ion-row>
         <ion-row>
           <ion-col>
-              <h3>Daily Ratio</h3>
-              <p>Carbohydrate</p>
-              <ion-progress-bar :value="foodBarCarb"></ion-progress-bar>
-              <p>Protein</p>
-              <ion-progress-bar :value="foodBarProtein"></ion-progress-bar>
-              <p>Vegetable</p>
-              <ion-progress-bar :value="foodBarVegetable"></ion-progress-bar>
-              <p>Total {{ counts.foodCal }} kCal</p>
+            <h3>
+              สัดส่วนอาหารโดยรวม
+            </h3>
+            <p>Carbohydrate</p>
+            <ion-progress-bar :value="foodBarCarb"></ion-progress-bar>
+            <p>Protein</p>
+            <ion-progress-bar :value="foodBarProtein"></ion-progress-bar>
+            <p>Vegetable</p>
+            <ion-progress-bar :value="foodBarVegetable"></ion-progress-bar>
+            <p>Total {{ counts.foodCal }} kCal</p>
           </ion-col>
         </ion-row>
         <ion-row>
           <ion-col>
-            <h4>สัดส่วนมื้ออาหาร</h4>
+            <h4>บันทึกอาหาร</h4>
           </ion-col>
         </ion-row>
         <ion-row>
@@ -37,7 +38,7 @@
                 <ion-input placeholder="dish name" v-model="dishName"></ion-input>
               </ion-item>
               <ion-item>
-                <ion-label position="floating">วันที่ / Date</ion-label>
+                <ion-label position="floating">วันที่</ion-label>
                 <ion-datetime display-format="MMM DD, YYYY HH:mm"
                               v-model="foodDateTime">
                 </ion-datetime>
@@ -112,7 +113,7 @@
         <ion-row>
           <ion-col>
             <ion-item>
-              <ion-label position="floating">Energy (kCal)</ion-label>
+              <ion-label position="floating">พลังงาน (kCal)</ion-label>
               <ion-input type="number" placeholder="100" v-model="foodCal"></ion-input>
             </ion-item>
           </ion-col>
@@ -120,7 +121,7 @@
         <ion-row>
           <ion-col>
             <ion-item>
-              <ion-label position="floating">Quantity (ฝ่ามือ)</ion-label>
+              <ion-label position="floating">ปริมาณ (ฝ่ามือ)</ion-label>
               <ion-input type="number" placeholder="1" v-model="foodQuantity"></ion-input>
             </ion-item>
           </ion-col>
@@ -133,31 +134,26 @@
             </ion-button>
           </ion-col>
         </ion-row>
+        <ion-row>
+          <ion-col>
+            <h3>รายการล่าสุด</h3>
+            <ion-list>
+              <ion-item v-for="foodPerDayRecord in foodPerDay.slice(0,3)" :key="foodPerDayRecord.id">
+                <ion-label>
+                  <p>
+                    {{ foodPerDayRecord.createdAt.toDate().toLocaleString() }}
+                  </p>
+                  <h3>
+                    {{ foodPerDayRecord.foodName}}
+                    {{ foodPerDayRecord.foodCal}} kCal
+                    {{ foodPerDayRecord.foodQuantity }} ฝ่ามือ
+                  </h3>
+                </ion-label>
+              </ion-item>
+            </ion-list>
+          </ion-col>
+        </ion-row>
       </ion-grid>
-      <ion-list>
-        <ion-item v-for="foodPerDayRecord in foodPerDay.slice(0,3)" :key="foodPerDayRecord.id">
-          <ion-label>
-            <p>
-              {{ foodPerDayRecord.createdAt.toDate().toLocaleString() }}
-            </p>
-            <h3>
-              {{ foodPerDayRecord.foodName}}
-              {{ foodPerDayRecord.foodCal}} kCal
-              {{ foodPerDayRecord.foodQuantity }} ฝ่ามือ
-            </h3>
-          </ion-label>
-        </ion-item>
-        <ion-item>
-          <ion-text>
-            <p>
-              เนื้อสัตว์ 1 ฝ่ามือ ประมาณ 85-100 กรัม
-            </p>
-            <p>
-              ข้าว 1 ฝ่ามือ/ถ้วย ประมาณ 80 กรัม
-            </p>
-          </ion-text>
-        </ion-item>
-      </ion-list>
       <ion-fab vertical="top" horizontal="start" slot="fixed">
         <ion-fab-button @click="$router.push({ name: 'Health' })">
           <ion-icon :icon="arrowBackCircle"></ion-icon>
