@@ -14,10 +14,6 @@
                 </ion-item>
               </ion-card-content>
             </ion-card>
-            <ion-text>
-              User Group
-              {{ userGroup }}
-            </ion-text>
           </ion-col>
         </ion-row>
         <ion-row>

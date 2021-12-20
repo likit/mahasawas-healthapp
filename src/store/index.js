@@ -28,7 +28,11 @@ const store = createStore({
             return state.user.userId
         },
         displayName: state => {
-            return state.user.displayName
+            if (state.user.firstNameTh !== '') {
+                return state.profile.firstNameTh + ' ' + state.profile.lastNameTh
+            } else {
+                return state.profile.firstNameEn + ' ' + state.profile.lastNameEn
+            }
         },
         walkRecords: state => {
             return state.activity_records.filter(d => d.type === 'walking')

@@ -5,84 +5,28 @@
         <ion-row>
           <ion-col>
             <ion-text class="ion-text-lg-center">
-              <h1>Ranking</h1>
+              <h1>Ranking Challenge</h1>
             </ion-text>
           </ion-col>
         </ion-row>
-        <ion-row class="ion-justify-content-center">
-          <ion-col size="12">
-            <ion-list>
-              <ion-item-group>
-                <ion-item-divider>
-                  <ion-label>
-                    โครงการนำร่อง
-                  </ion-label>
-                </ion-item-divider>
-                <ion-item inset="true">
-                  <ion-avatar slot="start">
-                    <img src="https://i.pravatar.cc/300">
-                  </ion-avatar>
-                  <ion-label>Toy</ion-label>
-                  <ion-note slot="end">545</ion-note>
-                </ion-item>
-                <ion-item inset="true">
-                  <ion-avatar slot="start">
-                    <img src="https://i.pravatar.cc/300">
-                  </ion-avatar>
-                  <ion-label>Likit</ion-label>
-                  <ion-note slot="end">435</ion-note>
-                </ion-item>
-                <ion-item inset="true">
-                  <ion-avatar slot="start">
-                    <img src="https://i.pravatar.cc/300">
-                  </ion-avatar>
-                  <ion-label>Tu</ion-label>
-                  <ion-note slot="end">234</ion-note>
-                </ion-item>
-                <ion-item inset="true">
-                  <ion-avatar slot="start">
-                    <img src="https://i.pravatar.cc/300">
-                  </ion-avatar>
-                  <ion-label>Nut</ion-label>
-                  <ion-note slot="end">230</ion-note>
-                </ion-item>
-              </ion-item-group>
-              <ion-item-group>
-                <ion-item-divider>
-                  <ion-label>
-                    โครงการลดพุง คณะเทคนิคการแพทย์
-                  </ion-label>
-                </ion-item-divider>
-                <ion-item inset="true">
-                  <ion-avatar slot="start">
-                    <img src="https://i.pravatar.cc/300">
-                  </ion-avatar>
-                  <ion-label>Toy</ion-label>
-                  <ion-note slot="end">545</ion-note>
-                </ion-item>
-                <ion-item inset="true">
-                  <ion-avatar slot="start">
-                    <img src="https://i.pravatar.cc/300">
-                  </ion-avatar>
-                  <ion-label>Likit</ion-label>
-                  <ion-note slot="end">435</ion-note>
-                </ion-item>
-                <ion-item inset="true">
-                  <ion-avatar slot="start">
-                    <img src="https://i.pravatar.cc/300">
-                  </ion-avatar>
-                  <ion-label>Tu</ion-label>
-                  <ion-note slot="end">234</ion-note>
-                </ion-item>
-                <ion-item inset="true">
-                  <ion-avatar slot="start">
-                    <img src="https://i.pravatar.cc/300">
-                  </ion-avatar>
-                  <ion-label>Nut</ion-label>
-                  <ion-note slot="end">230</ion-note>
-                </ion-item>
-              </ion-item-group>
-            </ion-list>
+        <ion-row>
+          <ion-col>
+            <ion-row v-for="ch in challenges" :key="ch.id">
+              <ion-col>
+                <ion-card>
+                  <img src="https://source.unsplash.com/J154nEkpzlQ">
+                  <ion-card-header>
+                    <ion-card-title>{{ ch.title }} Challenges</ion-card-title>
+                  </ion-card-header>
+                  <ion-card-content>
+                    {{ ch.pitch }}
+                    <ion-button @click="$router.push({ name: 'RankingChallenge', params: { recordId: ch.id}})">
+                      Ranking
+                    </ion-button>
+                  </ion-card-content>
+                </ion-card>
+              </ion-col>
+            </ion-row>
           </ion-col>
         </ion-row>
       </ion-grid>
@@ -92,38 +36,39 @@
 
 <script>
 import {
-  IonItemDivider,
-  IonItemGroup,
-  IonAvatar,
   IonContent,
   IonPage,
-  IonList,
-  IonLabel,
-  IonItem,
   IonGrid,
   IonRow,
   IonCol,
-  IonNote,
   IonText,
+  IonCard,
+  IonCardHeader,
+  IonCardTitle,
+  IonCardContent,
+  IonButton
 } from '@ionic/vue';
-export default {
+import {defineComponent} from 'vue';
+import {mapState} from "vuex";
+export default defineComponent({
   name: "Ranking",
   components: {
-    IonItemDivider,
     IonText,
-    IonNote,
     IonGrid,
     IonRow,
     IonCol,
-    IonItemGroup,
-    IonAvatar,
     IonContent,
     IonPage,
-    IonList,
-    IonItem,
-    IonLabel,
+    IonCard,
+    IonCardHeader,
+    IonCardTitle,
+    IonCardContent,
+    IonButton,
   },
-}
+  computed: {
+    ...mapState(['user','challenges','profile'])
+  }
+});
 </script>
 
 <style scoped>
