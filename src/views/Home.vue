@@ -19,7 +19,7 @@
         <ion-row>
           <ion-col>
             <ion-card>
-              <img src="https://source.unsplash.com/gJtDg6WfMlQ">
+              <img :src="activity_records.length > 0 ? imageLogos[activity_records.slice(0, 4)[0].type] : ''">
               <ion-card-header>
                 <ion-card-title>Your Recent Activities</ion-card-title>
               </ion-card-header>
@@ -43,7 +43,7 @@
         <ion-row v-for="ch in challenges" :key="ch.id">
           <ion-col>
             <ion-card>
-              <img :src="ch.imageUrl">
+              <img :src="ch.imageUrl !== '' ? ch.imageUrl : 'https://source.unsplash.com/gJtDg6WfMlQ'">
               <ion-card-header>
                 <ion-card-title>{{ ch.title }}</ion-card-title>
               </ion-card-header>
@@ -131,9 +131,10 @@ export default defineComponent({
     return {
       authToken: null,
       urlQuery: null,
+      imageLogos: {}
     }
   },
-  mounted () {
+  async mounted() {
     let urlQuery = this.$route.query
     if (Object.keys(urlQuery).length !== 0) {
       this.setUpUser(urlQuery)
@@ -155,6 +156,7 @@ export default defineComponent({
         groupType: 'staff',
       })
     }
+    await this.loadImageLogos()
   },
   methods: {
     async setUpUser(data) {
@@ -236,8 +238,16 @@ export default defineComponent({
           this.$store.dispatch('addChallenge', data)
         })
       }
+    },
+    async loadImageLogos () {
+      let ref = collection(db, 'activity_image_logos')
+      let querySnapshot = await getDocs(ref)
+      querySnapshot.forEach(d => {
+        let data = d.data()
+        this.imageLogos[data.type] = data.url
+      })
     }
-  },
+  }
 });
 </script>
 

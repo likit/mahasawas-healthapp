@@ -75,6 +75,9 @@ const store = createStore({
         ADD_ACTIVITY(state, payload) {
             state.activity_records.push(payload)
         },
+        INSERT_ACTIVITY(state, payload) {
+            state.activity_records.unshift(payload)
+        },
         DELETE_ACTIVITY(state, payload) {
             state.activity_records = state.activity_records.filter(d => d.id !== payload )
         },
@@ -106,6 +109,9 @@ const store = createStore({
         },
         addActivity({ commit }, payload) {
             commit('ADD_ACTIVITY', payload)
+        },
+        insertActivity({ commit }, payload) {
+            commit('INSERT_ACTIVITY', payload)
         },
         deleteActivity({ commit }, payload) {
             commit('DELETE_ACTIVITY', payload)

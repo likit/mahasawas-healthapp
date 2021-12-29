@@ -14,6 +14,16 @@
       </ion-row>
       <ion-row>
         <ion-col>
+          <ion-button expand="block" @click="$router.push({ name: 'WalkRecordForm' })">
+            Add
+          </ion-button>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col>
+          <div class="ion-text-center">
+            <h3>รายการล่าสุด</h3>
+          </div>
           <ion-list>
             <ion-item detail v-for="record in walkRecords.slice(0, 7)"
                       :key="record.id" @click="goToDetail(record.id)">
@@ -29,19 +39,17 @@
           </ion-list>
         </ion-col>
       </ion-row>
-      <ion-row>
-        <ion-col>
-          <ion-button expand="block" @click="$router.push({ name: 'WalkRecordForm' })">
-            Add
-          </ion-button>
-        </ion-col>
-      </ion-row>
     </ion-grid>
     <ion-fab vertical="top" horizontal="start" slot="fixed">
       <ion-fab-button @click="$router.push({ name: 'Exercise' })">
         <ion-icon :icon="arrowBackCircle"></ion-icon>
       </ion-fab-button>
     </ion-fab>
+    <ion-fab vertical="bottom" horizontal="end">
+      <ion-fab-button color="success">
+        <ion-icon :icon="golfOutline"></ion-icon>
+      </ion-fab-button>
+      </ion-fab>
   </ion-content>
 </ion-page>
 </template>
@@ -64,7 +72,7 @@ import {
 } from '@ionic/vue';
 
 import {defineComponent} from 'vue';
-import { arrowBackCircle } from 'ionicons/icons'
+import { arrowBackCircle, addOutline, golfOutline } from 'ionicons/icons'
 import {mapGetters, mapState} from "vuex";
 
 export default defineComponent({
@@ -87,6 +95,8 @@ export default defineComponent({
   setup () {
     return {
       arrowBackCircle,
+      golfOutline,
+      addOutline
     }
   },
   computed: {
