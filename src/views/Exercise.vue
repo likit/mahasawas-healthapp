@@ -6,8 +6,7 @@
           <ion-col>
             <ion-text class="ion-text-lg-center">
               <div class="ion-text-center">
-                <h1>Exercise</h1>
-                <p>{{ displayName }}</p>
+                <h1>Exercise Records</h1>
               </div>
             </ion-text>
           </ion-col>

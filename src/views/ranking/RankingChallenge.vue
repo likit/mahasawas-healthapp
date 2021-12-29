@@ -6,7 +6,7 @@
           <ion-col>
             <ion-text>
               <div class="ion-text-center">
-                <h1>Ranking</h1>
+                <h1>Standing</h1>
                 <p>{{ challengeTitle }}</p>
               </div>
             </ion-text>

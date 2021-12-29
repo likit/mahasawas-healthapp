@@ -4,9 +4,11 @@
       <ion-grid>
         <ion-row>
           <ion-col>
-            <ion-text class="ion-text-lg-center">
-              <h1>Ranking Challenge</h1>
-            </ion-text>
+            <div class="ion-text-center">
+              <ion-text class="ion-text-lg-center">
+                <h1>Challenge Standing</h1>
+              </ion-text>
+            </div>
           </ion-col>
         </ion-row>
         <ion-row>
@@ -14,14 +16,14 @@
             <ion-row v-for="ch in challenges" :key="ch.id">
               <ion-col>
                 <ion-card>
-                  <img src="https://source.unsplash.com/J154nEkpzlQ">
+                  <img :src="ch.imageUrl">
                   <ion-card-header>
                     <ion-card-title>{{ ch.title }} Challenges</ion-card-title>
                   </ion-card-header>
                   <ion-card-content>
                     {{ ch.pitch }}
                     <ion-button @click="$router.push({ name: 'RankingChallenge', params: { recordId: ch.id}})">
-                      Ranking
+                      View
                     </ion-button>
                   </ion-card-content>
                 </ion-card>

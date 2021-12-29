@@ -13,7 +13,7 @@
         </ion-tab-button>
         <ion-tab-button tab="ranking" href="/tabs/ranking">
           <ion-icon :icon="barChart"></ion-icon>
-          <ion-label>Ranking</ion-label>
+          <ion-label>Standing</ion-label>
         </ion-tab-button>
         <ion-tab-button tab="health" href="/tabs/health">
           <ion-icon :icon="accessibility"></ion-icon>

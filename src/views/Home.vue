@@ -43,7 +43,7 @@
         <ion-row v-for="ch in challenges" :key="ch.id">
           <ion-col>
             <ion-card>
-              <img src="https://source.unsplash.com/J154nEkpzlQ">
+              <img :src="ch.imageUrl">
               <ion-card-header>
                 <ion-card-title>{{ ch.title }}</ion-card-title>
               </ion-card-header>
