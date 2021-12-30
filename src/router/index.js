@@ -104,6 +104,11 @@ const routes = [
     component: () => import('../views/activities/JogRecordForm')
   },
   {
+    path: '/activities/jog-record-goal-form',
+    name: 'JogRecordGoalForm',
+    component: () => import('../views/activities/JogRecordGoalForm')
+  },
+  {
     path: '/activities/swim-records',
     name: 'SwimRecord',
     component: () => import('../views/activities/SwimRecord')
