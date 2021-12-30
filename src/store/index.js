@@ -12,6 +12,8 @@ const store = createStore({
             challenges: [],
         },
         activity_records: [],
+        meditation_records: [],
+        mood_records: [],
         goals: [],
         userGroup: null,
         groups: [],
@@ -76,6 +78,18 @@ const store = createStore({
         ADD_ACTIVITY(state, payload) {
             state.activity_records.push(payload)
         },
+        ADD_MOOD(state, payload) {
+            state.mood_records.push(payload)
+        },
+        INSERT_MOOD(state, payload) {
+            state.mood_records.unshift(payload)
+        },
+        ADD_MEDITATION(state, payload) {
+            state.meditation_records.push(payload)
+        },
+        INSERT_MEDITATION(state, payload) {
+            state.meditation_records.unshift(payload)
+        },
         ADD_GOAL(state, payload) {
             state.goals.push(payload)
         },
@@ -119,6 +133,18 @@ const store = createStore({
         },
         insertActivity({ commit }, payload) {
             commit('INSERT_ACTIVITY', payload)
+        },
+        addMeditation({ commit }, payload) {
+            commit('ADD_MEDITATION', payload)
+        },
+        insertMeditation({ commit }, payload) {
+            commit('INSERT_MEDITATION', payload)
+        },
+        addMood({ commit }, payload) {
+            commit('ADD_MOOD', payload)
+        },
+        insertMood({ commit }, payload) {
+            commit('INSERT_MOOD', payload)
         },
         addGoal({ commit }, payload) {
             commit('ADD_GOAL', payload)

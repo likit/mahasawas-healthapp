@@ -252,7 +252,32 @@ const routes = [
     path: '/diet/foodsearch',
     name: 'foodsearch',
     component: () => import('../views/health/diet/FoodSearch')
-  }
+  },
+  {
+    path: '/meditation',
+    name: 'MeditationRecord',
+    component: () => import('../views/health/mediation/MeditationRecord')
+  },
+  {
+    path: '/meditation/form',
+    name: 'MeditationRecordForm',
+    component: () => import('../views/health/mediation/MeditationRecordForm')
+  },
+  {
+    path: '/mood',
+    name: 'MoodRecord',
+    component: () => import('../views/health/mood/MoodRecord')
+  },
+  {
+    path: '/mood/form',
+    name: 'MoodRecordForm',
+    component: () => import('../views/health/mood/MoodRecordForm')
+  },
+  {
+    path: '/mood/detail/:recordId',
+    name: 'MoodRecordDetail',
+    component: () => import('../views/health/mood/MoodRecordDetail')
+  },
 ]
 
 const router = createRouter({

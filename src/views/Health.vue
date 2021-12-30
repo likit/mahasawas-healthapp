@@ -56,14 +56,14 @@
                 <ion-item-divider>
                   <ion-label>Mind</ion-label>
                 </ion-item-divider>
-                <ion-item inset="true" detail href="/tabs/home">
+                <ion-item inset="true" detail @click="$router.push({name: 'MoodRecord'})">
                   <ion-icon slot="start" :icon="happyOutline"></ion-icon>
                   <ion-label>
                     Mood
                     <p>อารมณ์</p>
                   </ion-label>
                 </ion-item>
-                <ion-item inset="true" detail href="/tabs/home" class="ion-margin-bottom">
+                <ion-item inset="true" detail @click="$router.push({name: 'MeditationRecord'})" class="ion-margin-bottom">
                   <ion-icon slot="start" :icon="headsetOutline"></ion-icon>
                   <ion-label>
                     Meditation
