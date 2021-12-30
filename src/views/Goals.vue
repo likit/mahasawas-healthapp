@@ -24,6 +24,7 @@
                 <ion-label>
                   {{ goal.deadline.toDate().toLocaleString() }}
                   <p>
+                    {{ goal.type }}:
                     {{ goal.steps }} steps,
                     {{ goal.min}} min,
                     {{ goal.calories.toFixed(1) }} Cal,
