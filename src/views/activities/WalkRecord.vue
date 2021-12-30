@@ -7,7 +7,6 @@
           <ion-text>
             <div class="ion-text-center">
               <h1>Walk Record</h1>
-              <p>{{ this.user.displayName }}</p>
             </div>
           </ion-text>
         </ion-col>
@@ -46,7 +45,7 @@
       </ion-fab-button>
     </ion-fab>
     <ion-fab vertical="bottom" horizontal="end">
-      <ion-fab-button color="success">
+      <ion-fab-button color="success" @click="$router.push({ name: 'WalkRecordGoalForm' })">
         <ion-icon :icon="golfOutline"></ion-icon>
       </ion-fab-button>
       </ion-fab>

@@ -77,7 +77,7 @@
                     Personal
                   </ion-label>
                 </ion-item-divider>
-                <ion-item inset="true" detail href="/tabs/home">
+                <ion-item inset="true" detail @click="$router.push({name: 'Goal'})">
                   <ion-icon slot="start" :icon="trophyOutline"></ion-icon>
                   <ion-label>
                     Goals

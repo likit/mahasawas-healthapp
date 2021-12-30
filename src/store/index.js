@@ -12,6 +12,7 @@ const store = createStore({
             challenges: [],
         },
         activity_records: [],
+        goals: [],
         userGroup: null,
         groups: [],
         challenges: [],
@@ -75,6 +76,12 @@ const store = createStore({
         ADD_ACTIVITY(state, payload) {
             state.activity_records.push(payload)
         },
+        ADD_GOAL(state, payload) {
+            state.goals.push(payload)
+        },
+        RESET_GOAL_LIST(state, payload) {
+            state.goals = state.goals.filter(g=>{ g.id != payload.id })
+        },
         INSERT_ACTIVITY(state, payload) {
             state.activity_records.unshift(payload)
         },
@@ -112,6 +119,12 @@ const store = createStore({
         },
         insertActivity({ commit }, payload) {
             commit('INSERT_ACTIVITY', payload)
+        },
+        addGoal({ commit }, payload) {
+            commit('ADD_GOAL', payload)
+        },
+        resetGoalList({ commit }, payload) {
+            commit('RESET_GOAL_LIST', payload)
         },
         deleteActivity({ commit }, payload) {
             commit('DELETE_ACTIVITY', payload)

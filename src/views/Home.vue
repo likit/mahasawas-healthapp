@@ -246,7 +246,7 @@ export default defineComponent({
         let data = d.data()
         this.imageLogos[data.type] = data.url
       })
-    }
+    },
   }
 });
 </script>

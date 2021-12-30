@@ -64,6 +64,11 @@ const routes = [
     component: () => import('../views/Milestone')
   },
   {
+    path: '/goals',
+    name: 'Goal',
+    component: () => import('../views/Goals')
+  },
+  {
     path: '/activities/walk-records',
     name: 'WalkRecord',
     component: () => import('../views/activities/WalkRecord')
@@ -72,6 +77,11 @@ const routes = [
     path: '/activities/walk-record-form',
     name: 'WalkRecordForm',
     component: () => import('../views/activities/WalkRecordForm')
+  },
+  {
+    path: '/activities/walk-record-goal-form',
+    name: 'WalkRecordGoalForm',
+    component: () => import('../views/activities/WalkRecordGoalForm')
   },
   {
     path: '/activities/walk-record-detail/:recordId',
