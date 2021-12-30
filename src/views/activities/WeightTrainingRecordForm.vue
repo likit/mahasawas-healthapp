@@ -226,7 +226,7 @@ export default defineComponent({
         }
         addDoc(ref, data).then((docRef)=>{
           data.id = docRef.id
-          this.$store.dispatch('addActivity',  data)
+          this.$store.dispatch('insertActivity',  data)
           this.$router.push({ name: 'WeightTrainingRecord' })
         })
       }
