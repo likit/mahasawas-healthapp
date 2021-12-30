@@ -61,12 +61,17 @@
         </ion-row>
         <ion-row>
           <ion-col>
-            <ion-button expand="block" color="success" @click="saveData">
+            <ion-button expand="block" color="success" @click="saveData" :disabled="!isFormValid">
               Save
             </ion-button>
           </ion-col>
         </ion-row>
       </ion-grid>
+      <ion-fab vertical="top" horizontal="start" slot="fixed">
+        <ion-fab-button @click="$router.push({ name: 'JogRecord' })">
+          <ion-icon :icon="arrowBackCircle"></ion-icon>
+        </ion-fab-button>
+      </ion-fab>
     </ion-content>
   </ion-page>
 </template>
@@ -87,13 +92,15 @@ import {
   IonListHeader,
   IonLabel,
   IonRange,
-  IonIcon, alertController,
+  IonFab,
+  IonFabButton,
+  IonIcon, alertController, toastController,
 } from '@ionic/vue';
 
-import { helpCircleOutline } from 'ionicons/icons'
+import { helpCircleOutline, arrowBackCircle } from 'ionicons/icons'
 import {defineComponent} from 'vue';
 import { db } from '../../firebase'
-import { collection, addDoc, Timestamp } from '@firebase/firestore'
+import {collection, addDoc, Timestamp, getDocs, query, where, updateDoc, doc} from '@firebase/firestore'
 import {mapGetters} from "vuex";
 
 export default defineComponent({
@@ -114,10 +121,13 @@ export default defineComponent({
     IonListHeader,
     IonLabel,
     IonRange,
+    IonFab,
+    IonFabButton,
   },
   setup () {
     return {
       helpCircleOutline,
+      arrowBackCircle
     }
   },
   data () {
@@ -145,6 +155,26 @@ export default defineComponent({
     }
   },
   methods: {
+    async openGoalToast() {
+      const toast = await toastController
+          .create({
+            header: "Goal Achieved!",
+            color: "success",
+            position: "top",
+            message: 'ยินดีด้วย คุณได้บรรลุอีกหนึ่งเป้าหมาย',
+            duration: 3000
+          })
+      return toast.present();
+    },
+    async openToast() {
+      const toast = await toastController
+          .create({
+            color: "dark",
+            message: 'เพิ่มรายการใหม่เรียบร้อยแล้ว',
+            duration: 2000
+          })
+      return toast.present();
+    },
     async presentAlert() {
       const alert = await alertController
           .create({
@@ -174,11 +204,51 @@ export default defineComponent({
           type: 'jogging',
           exerType: 'Cardio'
         }
-        addDoc(ref, data).then((docRef)=>{
+        addDoc(ref, data).then(async (docRef) => {
           data.id = docRef.id
+          let qSnapshot = await getDocs(query(collection(db, 'goals'),
+              where('achieved', '==', false),
+              where('type', '==', 'jogging'),
+              where('userId', '==', this.$store.state.user.userId)))
+          for (let g of qSnapshot.docs) {
+            let cumulative_data = {
+              cum_steps: 0,
+              cum_distance: 0,
+              cum_calories: 0,
+            }
+            let record = g.data()
+            if (record.steps != 0) {
+              cumulative_data['cum_steps'] = record.cum_steps + parseInt(data.steps)
+              if (cumulative_data.cum_steps >= record.steps) {
+                cumulative_data.achieved = true
+              }
+            }
+            if (record.distance != 0) {
+              cumulative_data['cum_distance'] = record.cum_distance + parseFloat(data.distance)
+              if (cumulative_data.cum_distance >= record.distance) {
+                cumulative_data.achieved = true
+              }
+            }
+            if (record.calories != 0) {
+              cumulative_data['cum_calories'] = record.cum_calories + parseFloat(data.calories)
+              if (cumulative_data.cum_calories >= record.calories) {
+                cumulative_data.achieved = true
+              }
+            }
+            if (cumulative_data.achieved == true) {
+              await this.openGoalToast()
+            }
+            await updateDoc(doc(db, 'goals', g.id), cumulative_data)
+            if (cumulative_data.achieved == true) {
+              this.$store.dispatch('resetGoalList', {id: g.id})
+            }
+          }
           this.$store.dispatch('insertActivity', data)
-          this.$router.push({ name: 'JogRecord' })
+          await this.openToast()
+          this.$router.push({name: 'JogRecord'})
         })
+      } else {
+        console.log('form not valid.')
       }
     }
   }
