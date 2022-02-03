@@ -239,6 +239,16 @@ const routes = [
     component: () => import('../views/ranking/RankingChallenge')
   },
   {
+    path: '/health/lab',
+    name: 'LabRecord',
+    component: () => import('../views/health/lab/LabRecord')
+  },
+  {
+    path: '/health/lab/form',
+    name: 'LabRecordForm',
+    component: () => import('../views/health/lab/LabRecordForm')
+  },
+  {
     path: '/health/drink',
     name: 'Drink',
     component: () => import('../views/health/diet/Drink')

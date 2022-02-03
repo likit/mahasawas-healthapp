@@ -1,6 +1,6 @@
 {
   "projects": {
-    "default": "uberhealth-c1541"
+    "default": "mahasawas-healthapp"
   },
   "targets": {
     "uberhealth-c1541": {

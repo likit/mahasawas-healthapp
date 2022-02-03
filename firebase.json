@@ -1,21 +1,10 @@
 {
   "hosting": {
-    "target": "mahidol",
     "public": "dist",
     "ignore": [
       "firebase.json",
       "**/.*",
       "**/node_modules/**"
-    ],
-    "rewrites": [
-      {
-        "source": "/api/authenticate",
-        "function": "authenticate"
-      },
-      {
-        "source": "**",
-        "destination": "/index.html"
-      }
     ]
   },
   "storage": {
@@ -34,5 +23,12 @@
     "ui": {
       "enabled": true
     }
+  },
+  "functions": {
+    "source": "functions"
+  },
+  "firestore": {
+    "rules": "firestore.rules",
+    "indexes": "firestore.indexes.json"
   }
 }

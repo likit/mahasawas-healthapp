@@ -84,11 +84,11 @@ import {
   IonNote,
   IonText,
 } from '@ionic/vue';
-import {defineComponent} from 'vue';
+import { defineComponent } from 'vue';
 import { ribbonOutline } from 'ionicons/icons';
-import {collection, getDocs, query, where, orderBy, doc, updateDoc, addDoc, getDoc} from "firebase/firestore";
-import {db} from "@/firebase";
-import { mapState} from "vuex";
+import { collection, getDocs, query, where, orderBy, doc, updateDoc } from "firebase/firestore";
+import { db } from "@/firebase";
+import { mapState } from "vuex";
 
 export default defineComponent({
   name: 'Home',
@@ -135,58 +135,9 @@ export default defineComponent({
     }
   },
   async mounted() {
-    let urlQuery = this.$route.query
-    if (Object.keys(urlQuery).length !== 0) {
-      this.setUpUser(urlQuery)
-    } else {
-      // this.$router.push({ name: 'Prohibition' })
-      this.setUpUser({
-        userId: 'mahidol-test',
-        userName: 'mahidol-test',
-        firstNameTh: 'ลิขิต',
-        lastNameTh: 'ปรียานนท์',
-        titleNameTh: 'ดร.',
-        titleNameEn: 'Dr.',
-        firstNameEn: 'Likit',
-        lastNameEn: 'Preeyanon',
-        userLogin: 'likit.pre@mahidol.ac.th',
-        emails: 'likit.pre@mahidol.ac.th',
-        facultyNameTh: 'คณะเทคนิคการแพทย์',
-        facultyNameEn: 'FACULTY OF MEDICAL TECHNOLOGY',
-        groupType: 'staff',
-      })
-    }
     await this.loadImageLogos()
   },
   methods: {
-    async setUpUser(data) {
-      let ref = collection(db, 'users')
-      let q = query(ref, where('userId', '==', data.userId))
-      let querySnapshot = await getDocs(q)
-      let userData = {
-        userId: data.userId,
-        userName: data.userName
-      }
-      if (querySnapshot.empty) {
-        await addDoc(ref, userData)
-      }
-      this.$store.commit('SET_USER', userData)
-      let profileRef = collection(db, 'profiles')
-      q = query(profileRef, where('userId', '==', data.userId))
-      querySnapshot = await getDocs(q)
-      if (querySnapshot.empty) {
-        data['challenges'] = []
-        await addDoc(profileRef, data)
-        this.$store.dispatch('updateProfile', data)
-      } else {
-        for (let d of querySnapshot.docs) {
-          let docRef = doc(db, 'profiles', d.id)
-          await updateDoc(docRef, data)
-          let docSnapshot = await getDoc(docRef)
-          this.$store.dispatch('updateProfile', docSnapshot.data())
-        }
-      }
-    },
     async addChallenge(challengeId) {
       if (this.profile.challenges.indexOf(challengeId) < 0) {
         let ref = collection(db, 'profiles')

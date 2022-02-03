@@ -16,7 +16,7 @@
                 <ion-item-divider>
                   <ion-label>Body</ion-label>
                 </ion-item-divider>
-                <ion-item inset="true" detail href="/tabs/home">
+                <ion-item inset="true" detail @click="$router.push({name: 'LabRecord'})">
                   <ion-icon slot="start" :icon="waterOutline"></ion-icon>
                   <ion-label>
                     Lab tests
