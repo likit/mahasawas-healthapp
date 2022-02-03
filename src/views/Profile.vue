@@ -9,6 +9,15 @@
                 <h1>Profile</h1>
               </div>
             </ion-text>
+            <ion-item inset="true">
+              <ion-avatar slot="start">
+                <img :src="user.pictureUrl">
+              </ion-avatar>
+              <ion-label>
+                <h2>{{ user.displayName }}</h2>
+                <p>{{ user.statusMessage }}</p>
+              </ion-label>
+            </ion-item>
           </ion-col>
         </ion-row>
         <ion-row>
@@ -75,6 +84,7 @@ import {
   IonRow,
   IonCol,
   IonText,
+  IonAvatar,
 } from '@ionic/vue';
 import {defineComponent} from 'vue';
 import { mapState } from 'vuex'
@@ -94,6 +104,7 @@ export default defineComponent({
     IonList,
     IonItem,
     IonLabel,
+    IonAvatar
   },
   setup() {
     return {

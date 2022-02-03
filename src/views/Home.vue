@@ -9,7 +9,7 @@
                 <ion-item lines="none">
                   <ion-icon slot="start" class="badge" size="large" :icon="ribbonOutline"></ion-icon>
                   <ion-text color="primary">
-                    Welcome {{ profile.titleNameTh || profile.titleNameEn }}{{ profile.firstNameTh || profile.firstNameEn }}
+                    ยินดีตอนรับ {{ user.displayName }}
                   </ion-text>
                 </ion-item>
               </ion-card-content>
@@ -21,11 +21,9 @@
             <ion-card>
               <img :src="activity_records.length > 0 ? imageLogos[activity_records.slice(0, 4)[0].type] : ''">
               <ion-card-header>
-                <ion-card-title>Your Recent Activities</ion-card-title>
+                <ion-card-title>กิจกรรมล่าสุด</ion-card-title>
               </ion-card-header>
               <ion-card-content>
-                <ion-text>Next level</ion-text>
-                <ion-progress-bar value="0.0"></ion-progress-bar>
                 <ion-list>
                   <ion-item lines="full" v-for="rec in activity_records.slice(0, 4)" :key="rec.id">
                     <ion-label>
@@ -78,7 +76,6 @@ import {
   IonItem,
   IonIcon,
   IonButton,
-  IonProgressBar,
   IonLabel,
   IonCardTitle,
   IonNote,
@@ -105,7 +102,6 @@ export default defineComponent({
     IonItem,
     IonIcon,
     IonButton,
-    IonProgressBar,
     IonLabel,
     IonCardTitle,
     IonNote,
@@ -197,6 +193,7 @@ export default defineComponent({
         let data = d.data()
         this.imageLogos[data.type] = data.url
       })
+      console.log(this.imageLogos)
     },
   }
 });

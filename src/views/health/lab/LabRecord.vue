@@ -91,6 +91,7 @@
 </template>
 
 <script>
+const MAX_NUMBER_OF_VALUES = 5
 import {
   IonContent,
   IonPage,
@@ -107,6 +108,8 @@ import {
   IonLabel,
   IonChip,
   IonCardTitle,
+  IonRefresher,
+  IonRefresherContent
 } from '@ionic/vue';
 import {defineComponent, shallowRef } from 'vue';
 import { Chart, registerables } from 'chart.js';
@@ -136,6 +139,8 @@ export default defineComponent({
     IonLabel,
     IonChip,
     IonCardTitle,
+    IonRefresher,
+    IonRefresherContent
   },
   setup () {
     return {
@@ -199,7 +204,7 @@ export default defineComponent({
       let ref = collection(db, 'lab_records')
       let q = query(ref,
           where('userId', '==', this.user.userId),
-          orderBy('labDateTime')
+          orderBy('labDateTime'),
       )
       this.gluchart.data.datasets[0].data = []
       this.chochart.data.datasets[0].data = []
@@ -207,22 +212,21 @@ export default defineComponent({
       let querySnapshot = await getDocs(q)
       querySnapshot.forEach((record) => {
         let data = record.data()
-        console.log(moment(data.labDateTime.toDate()).format('YYYY-MM-DD'))
-        if (data.labTest.labGlu !== null) {
+        if (data.labTest.labGlu !== null && this.gluchart.data.datasets[0].data.length < MAX_NUMBER_OF_VALUES) {
           this.gluchart.data.datasets[0].data.push({
             y: parseFloat(data.labTest.labGlu),
             x: moment(data.labDateTime.toDate()).format('YYYY-MM-DD')
           })
           this.latestGlu = parseFloat(data.labTest.labGlu)
         }
-        if (data.labTest.labCHO !== null) {
+        if (data.labTest.labCHO !== null && this.chochart.data.datasets[0].data.length < MAX_NUMBER_OF_VALUES) {
           this.chochart.data.datasets[0].data.push({
             y: parseFloat(data.labTest.labCHO),
             x: moment(data.labDateTime.toDate()).format('YYYY-MM-DD')
           })
           this.latestCHO = parseFloat(data.labTest.labCHO)
         }
-        if (data.labTest.labTG !== null) {
+        if (data.labTest.labTG !== null && this.tgchart.data.datasets[0].data.length < MAX_NUMBER_OF_VALUES) {
           this.tgchart.data.datasets[0].data.push({
             y: parseFloat(data.labTest.labTG),
             x: moment(data.labDateTime.toDate()).format('YYYY-MM-DD')
@@ -247,22 +251,21 @@ export default defineComponent({
     let querySnapshot = await getDocs(q)
     querySnapshot.forEach((record) => {
       let data = record.data()
-      console.log(moment(data.labDateTime.toDate()).format('YYYY-MM-DD'))
-      if (data.labTest.labGlu !== null) {
+      if (data.labTest.labGlu !== null && this.gluData.length < MAX_NUMBER_OF_VALUES) {
         this.gluData.push({
           y: parseFloat(data.labTest.labGlu),
           x: moment(data.labDateTime.toDate()).format('YYYY-MM-DD')
         })
         this.latestGlu = parseFloat(data.labTest.labGlu)
       }
-      if (data.labTest.labCHO !== null) {
+      if (data.labTest.labCHO !== null && this.choData.length < MAX_NUMBER_OF_VALUES) {
         this.choData.push({
           y: parseFloat(data.labTest.labCHO),
           x: moment(data.labDateTime.toDate()).format('YYYY-MM-DD')
         })
         this.latestCHO = parseFloat(data.labTest.labCHO)
       }
-      if (data.labTest.labTG !== null) {
+      if (data.labTest.labTG !== null && this.tgData.length < MAX_NUMBER_OF_VALUES) {
         this.tgData.push({
           y: parseFloat(data.labTest.labTG),
           x: moment(data.labDateTime.toDate()).format('YYYY-MM-DD')
