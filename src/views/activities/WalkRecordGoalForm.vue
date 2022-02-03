@@ -129,8 +129,9 @@ export default defineComponent({
     async openToast() {
       const toast = await toastController
           .create({
-            color: "dark",
             message: 'Your new goal has been set!',
+            position: "top",
+            color: "success",
             duration: 2000
           })
       return toast.present();

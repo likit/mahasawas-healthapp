@@ -25,6 +25,7 @@ const store = createStore({
           userId: null
         },
         currentWeight:null,
+        currentHeight: null,
     },
     getters: {
         userId: state => {
@@ -119,6 +120,9 @@ const store = createStore({
         },
         SET_Weight(state,weight){
             state.currentWeight = weight
+        },
+        SET_Height(state,height){
+            state.currentHeight = height
         }
     },
     actions: {
@@ -172,8 +176,10 @@ const store = createStore({
         },
         updateWeight({commit},weight){
             commit('SET_Weight', weight)
+        },
+        updateHeight({commit},height){
+            commit('SET_Height', height)
         }
-
     }
 })
 

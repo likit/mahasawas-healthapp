@@ -1,6 +1,6 @@
 {
-  "name": "uhealth",
-  "version": "0.5.0",
+  "name": "Mahasawas health app",
+  "version": "1.0.0",
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",

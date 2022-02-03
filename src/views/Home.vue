@@ -113,7 +113,13 @@ export default defineComponent({
     }
   },
   computed: {
-    ...mapState(['user', 'profile', 'activity_records', 'challenges', 'groups']),
+    ...mapState(['user', 'profile', 'activity_records', 'challenges', 'groups', 'currentHeight', 'currentWeight']),
+    bmi () {
+      return this.currentWeight / Math.pow(this.currentHeight * 0.01, 2)
+    },
+    hasBmi () {
+      return this.currentHeight !== null && this.currentHeight !== null
+    }
   },
   // mapState is async operation, we need to watch for when the data is ready
   watch: {
@@ -132,6 +138,14 @@ export default defineComponent({
   },
   async mounted() {
     await this.loadImageLogos()
+    let weightRef = collection(db, 'weight')
+    let q = query(weightRef, where('userId', '==', this.user.userId), orderBy('weightdate', 'desc'))
+    let querySnapshot = await getDocs(q)
+    this.$store.dispatch('updateWeight', parseFloat(querySnapshot.docs[0].data().weight))
+    let heightRef = collection(db, 'height')
+    q = query(heightRef, where('userId', '==', this.user.userId), orderBy('date', 'desc'))
+    querySnapshot = await getDocs(q)
+    this.$store.dispatch('updateHeight', parseFloat(querySnapshot.docs[0].data().height))
   },
   methods: {
     async addChallenge(challengeId) {

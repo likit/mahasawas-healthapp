@@ -20,7 +20,7 @@ export default defineComponent({
   },
   methods: {
     async initializeLine () {
-      liff.init({liffId: '1656587558-Njod5Y9o'}).then(() => {
+      liff.init({liffId: '1656855755-l64BBAo0'}).then(() => {
         if (!liff.isInClient() && !liff.isLoggedIn()) {
           liff.login()
         }
@@ -41,6 +41,7 @@ export default defineComponent({
                 firstNameEn: null,
                 lastNameEn: null,
                 titleNameEn: null,
+                email: null,
                 phone: null,
                 challenges: [],
               }

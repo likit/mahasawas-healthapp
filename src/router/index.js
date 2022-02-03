@@ -259,6 +259,11 @@ const routes = [
     component: () => import('../views/physical/weight')
   },
   {
+    path: '/physical/height',
+    name: 'height',
+    component: () => import('../views/physical/height')
+  },
+  {
     path: '/diet/foodsearch',
     name: 'foodsearch',
     component: () => import('../views/health/diet/FoodSearch')

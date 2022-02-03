@@ -37,7 +37,7 @@
       </ion-row>
     </ion-grid>
     <ion-fab vertical="top" horizontal="start" slot="fixed">
-      <ion-fab-button @click="$router.push({ name: 'Exercise' })">
+      <ion-fab-button @click="$router.push({ name: 'Health' })">
         <ion-icon :icon="arrowBackCircle"></ion-icon>
       </ion-fab-button>
     </ion-fab>
